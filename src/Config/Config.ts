@@ -60,6 +60,21 @@ export class Config {
    * @param defaultValue Default value if not found.
    */
   public get<T = any>(key: string, defaultValue?: T): T {
-    return get(this.params, key, defaultValue);
+    let param = get(this.params, key, defaultValue);
+
+    // resolve <references>
+    if (typeof param === 'string') {
+      param = param.replace(/<([\w\d.]+)>/g, (match, refName) => {
+        const resolved = this.get(refName);
+        if (!['string', 'number', 'undefined'].includes(typeof resolved)) {
+          throw new Error(
+            `Cannot reference non-scalar param "${refName}" while getting "${key}" config param.`,
+          );
+        }
+        return resolved;
+      });
+    }
+
+    return param;
   }
 }
