@@ -1,0 +1,4 @@
+{
+  "main": "../dist/proxy/typedi.js",
+  "types": "../dist/proxy/typedi.d.ts"
+}

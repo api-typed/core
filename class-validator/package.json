@@ -1,0 +1,4 @@
+{
+  "main": "../dist/proxy/class-validator.js",
+  "types": "../dist/proxy/class-validator.d.ts"
+}

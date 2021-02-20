@@ -1,0 +1,4 @@
+{
+  "main": "../dist/proxy/routing-controllers.js",
+  "types": "../dist/proxy/routing-controllers.d.ts"
+}

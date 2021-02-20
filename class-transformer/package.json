@@ -1,0 +1,4 @@
+{
+  "main": "../dist/proxy/class-transformer.js",
+  "types": "../dist/proxy/class-transformer.d.ts"
+}
