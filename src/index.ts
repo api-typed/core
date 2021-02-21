@@ -5,4 +5,5 @@ export * from './AppModule';
 export * from './Config';
 export * from './Http';
 export * from './lib/loadControllers';
+export * from './Logger';
 export * from './StandardApp';

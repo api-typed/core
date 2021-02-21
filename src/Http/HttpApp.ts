@@ -41,17 +41,34 @@ export class HttpApp extends App {
       controllers,
     });
     Container.set(HttpServices.ExpressApp, this.expressApp);
+
+    const routes: string[] = this.expressApp._router.stack.reduce(
+      (routes, middleware) => {
+        if (!middleware.route) {
+          return routes;
+        }
+
+        const { method } = middleware.route.stack[0];
+        const { path } = middleware.route;
+
+        return [...routes, `${method.toUpperCase()} ${path}`];
+      },
+      [],
+    );
+
+    this.logger.debug('Loaded HTTP routes', { data: routes });
   }
 
   /**
    * Start the application and therefore the HTTP server.
    */
   public async start(): Promise<Server> {
+    const port = this.config.get<number>('http.port');
     return new Promise((resolve) => {
-      this.server = this.expressApp.listen(
-        this.config.get<number>('http.port'),
-        () => resolve(this.server),
-      );
+      this.server = this.expressApp.listen(port, () => {
+        this.logger.info(`HTTP server listening on port :${port}`);
+        resolve(this.server);
+      });
       Container.set(HttpServices.ExpressServer, this.server);
     });
   }

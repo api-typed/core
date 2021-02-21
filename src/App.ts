@@ -3,6 +3,7 @@ import * as path from 'path';
 import { AppModule } from './AppModule';
 import { Config } from './Config';
 import { loadEnvFiles } from './lib/loadEnvFiles';
+import { LogFormat, Logger, LoggerInterface, LogLevel } from './Logger';
 import Container, { Token } from './proxy/typedi';
 
 /**
@@ -11,6 +12,7 @@ import Container, { Token } from './proxy/typedi';
 export const AppServices = {
   App: new Token<App>('app'),
   Config: new Token<Config>('config'),
+  Logger: new Token<LoggerInterface>('logger'),
 };
 
 /**
@@ -40,6 +42,11 @@ export abstract class App {
   public readonly config: Config;
 
   /**
+   * Application logger.
+   */
+  public readonly logger: LoggerInterface;
+
+  /**
    * Initializes the application.
    *
    * @param rootDir Path to the root of the application, usually best passed as __dirname.
@@ -60,11 +67,21 @@ export abstract class App {
     this.projectDir = path.dirname(packageJsonPath);
     this.modules = modules;
 
-    loadEnvFiles(this.nodeEnv, this.projectDir);
+    const envFiles = loadEnvFiles(this.nodeEnv, this.projectDir);
 
     this.config = this.initConfig();
-
     Container.set(AppServices.Config, this.config);
+
+    this.logger = this.initLogger();
+    Container.set(AppServices.Logger, this.logger);
+
+    this.logger.debug('Application initialized');
+    this.logger.debug('Loaded env files', {
+      data: envFiles,
+    });
+    this.logger.debug('Loaded modules', {
+      data: this.modules.map((mod) => mod.constructor.name),
+    });
   }
 
   /**
@@ -87,10 +104,22 @@ export abstract class App {
       isDevelopment: this.nodeEnv === 'development',
       isTest: this.nodeEnv === 'test',
     });
+    config.loadFromFile(__dirname + '/app.config');
 
     // load default configs from all the modules
     this.modules.map((mod) => mod.loadConfig(config));
 
     return config;
+  }
+
+  /**
+   * Initializes application main logger.
+   */
+  private initLogger(): LoggerInterface {
+    return new Logger(
+      'app',
+      this.config.get<LogLevel>('log.level'),
+      this.config.get<LogFormat>('log.format'),
+    );
   }
 }
