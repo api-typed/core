@@ -9,6 +9,7 @@ import Container, { Token } from './proxy/typedi';
  * Names of services registered by the application.
  */
 export const AppServices = {
+  App: new Token<App>('app'),
   Config: new Token<Config>('config'),
 };
 
@@ -45,11 +46,18 @@ export abstract class App {
    * @param modules Modules to be loaded in this application.
    */
   constructor(rootDir: string, modules: AppModule[] = []) {
-    this.nodeEnv = process.env.NODE_ENV;
+    const packageJsonPath = findPackageJson(rootDir).next().filename;
+    if (!packageJsonPath) {
+      throw new Error(
+        'Could not resolve path to your package.json file. Make sure to pass valid rootDir argument to the App constructor (usually __dirname).',
+      );
+    }
+
+    Container.set(AppServices.App, this);
+
+    this.nodeEnv = process.env.NODE_ENV || 'development';
     this.rootDir = rootDir;
-    this.projectDir = path.dirname(
-      findPackageJson(this.rootDir).next().filename,
-    );
+    this.projectDir = path.dirname(packageJsonPath);
     this.modules = modules;
 
     loadEnvFiles(this.nodeEnv, this.projectDir);
@@ -75,6 +83,9 @@ export abstract class App {
       rootDir: this.rootDir,
       projectDir: this.projectDir,
       env: this.nodeEnv,
+      isProduction: this.nodeEnv === 'production',
+      isDevelopment: this.nodeEnv === 'development',
+      isTest: this.nodeEnv === 'test',
     });
 
     // load default configs from all the modules
