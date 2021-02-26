@@ -16,6 +16,18 @@ export class Config {
   private loadedFiles: string[] = [];
 
   /**
+   * Is the config frozen?
+   */
+  private isFrozen = false;
+
+  /**
+   * Freeze the config to prevent from loading any new configuration.
+   */
+  public freeze(): void {
+    this.isFrozen = true;
+  }
+
+  /**
    * Loads all files in the given folder as config files and merges them with
    * the existing configuration.
    *
@@ -50,6 +62,10 @@ export class Config {
    * @param obj Configuration object.
    */
   public loadFromObject(obj: Record<string, any>): void {
+    if (this.isFrozen) {
+      throw new Error('Cannot load new configuration into a frozen config');
+    }
+
     merge(this.params, obj);
   }
 

@@ -109,6 +109,8 @@ export abstract class App {
     // load default configs from all the modules
     this.modules.map((mod) => mod.loadConfig(config));
 
+    config.freeze();
+
     return config;
   }
 
