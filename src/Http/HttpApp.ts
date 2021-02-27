@@ -1,12 +1,14 @@
 import * as Express from 'express';
 import { Server } from 'net';
-import { App } from '../App';
-import { AppModule } from '../AppModule';
+import { ModuleInterface } from '../App';
+import { App } from '../App/App';
 import {
   createExpressServer,
   useContainer,
 } from '../proxy/routing-controllers';
 import Container, { Token } from '../proxy/typedi';
+import { HasControllers } from './HasControllers';
+import { HasMiddlewares } from './HasMiddlewares';
 import { HttpModule } from './HttpModule';
 
 /**
@@ -27,18 +29,14 @@ export class HttpApp extends App {
 
   private server: Server;
 
-  constructor(rootDir: string, modules: AppModule[] = []) {
+  constructor(rootDir: string, modules: ModuleInterface[] = []) {
     super(rootDir, [new HttpModule(), ...modules]);
 
     useContainer(Container);
 
-    // load controllers from all registered modules
-    const controllers = this.modules.reduce((controllers, mod) => {
-      return [...controllers, ...mod.loadControllers(this.config)];
-    }, []);
-
     this.expressApp = createExpressServer({
-      controllers,
+      controllers: this.loadControllers(),
+      middlewares: this.loadMiddlewares(),
     });
     Container.set(HttpServices.ExpressApp, this.expressApp);
 
@@ -63,6 +61,8 @@ export class HttpApp extends App {
    * Start the application and therefore the HTTP server.
    */
   public async start(): Promise<Server> {
+    await super.start();
+
     const port = this.config.get<number>('http.port');
     return new Promise((resolve) => {
       this.server = this.expressApp.listen(port, () => {
@@ -71,5 +71,43 @@ export class HttpApp extends App {
       });
       Container.set(HttpServices.ExpressServer, this.server);
     });
+  }
+
+  /**
+   * Load controllers from all modules that provide them.
+   */
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  private loadControllers(): Function[] {
+    // instanceof Interface checker
+    const hasControllers = (mod: any): mod is HasControllers => {
+      return 'loadControllers' in mod;
+    };
+
+    const controllerProviders: HasControllers[] = this.modules.filter(
+      hasControllers,
+    ) as any[];
+
+    return controllerProviders.reduce((controllers, mod: HasControllers) => {
+      return [...controllers, ...mod.loadControllers(this.config)];
+    }, []);
+  }
+
+  /**
+   * Load middlewares from all modules that provide them.
+   */
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  private loadMiddlewares(): Function[] {
+    // instanceof Interface checker
+    const hasMiddlewares = (mod: any): mod is HasMiddlewares => {
+      return 'loadMiddlewares' in mod;
+    };
+
+    const middlewareProviders: HasMiddlewares[] = this.modules.filter(
+      hasMiddlewares,
+    ) as any[];
+
+    return middlewareProviders.reduce((middlewares, mod: HasMiddlewares) => {
+      return [...middlewares, ...mod.loadMiddlewares(this.config)];
+    }, []);
   }
 }
