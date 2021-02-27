@@ -1,10 +1,10 @@
 import * as findPackageJson from 'find-package-json';
 import * as path from 'path';
-import { AppModule } from './AppModule';
-import { Config } from './Config';
-import { loadEnvFiles } from './lib/loadEnvFiles';
-import { LogFormat, Logger, LoggerInterface, LogLevel } from './Logger';
-import Container, { Token } from './proxy/typedi';
+import { Config } from '../Config';
+import { loadEnvFiles } from '../lib/loadEnvFiles';
+import { LogFormat, Logger, LoggerInterface, LogLevel } from '../Logger';
+import Container, { Token } from '../proxy/typedi';
+import { ModuleInterface } from './ModuleInterface';
 
 /**
  * Names of services registered by the application.
@@ -34,7 +34,7 @@ export abstract class App {
   /**
    * Loaded modules.
    */
-  public readonly modules: AppModule[];
+  public readonly modules: ModuleInterface[];
 
   /**
    * Configuration.
@@ -52,7 +52,7 @@ export abstract class App {
    * @param rootDir Path to the root of the application, usually best passed as __dirname.
    * @param modules Modules to be loaded in this application.
    */
-  constructor(rootDir: string, modules: AppModule[] = []) {
+  constructor(rootDir: string, modules: ModuleInterface[] = []) {
     const packageJsonPath = findPackageJson(rootDir).next().filename;
     if (!packageJsonPath) {
       throw new Error(
@@ -80,7 +80,7 @@ export abstract class App {
       data: envFiles,
     });
     this.logger.debug('Loaded modules', {
-      data: this.modules.map((mod) => mod.constructor.name),
+      data: this.modules.map((mod) => mod.name),
     });
   }
 
@@ -104,7 +104,7 @@ export abstract class App {
       isDevelopment: this.nodeEnv === 'development',
       isTest: this.nodeEnv === 'test',
     });
-    config.loadFromFile(__dirname + '/app.config');
+    config.loadFromFile(__dirname + '/config');
 
     // load default configs from all the modules
     this.modules.map((mod) => mod.loadConfig(config));
@@ -119,9 +119,36 @@ export abstract class App {
    */
   private initLogger(): LoggerInterface {
     return new Logger(
-      'app',
+      this.config.get<string>('appName'),
       this.config.get<LogLevel>('log.level'),
       this.config.get<LogFormat>('log.format'),
     );
+  }
+
+  /**
+   * Start the aplication.
+   *
+   * Calls init() method on all registered modules in sequence.
+   */
+  public async start(): Promise<unknown> {
+    for (const mod of this.modules) {
+      await mod.init(this);
+    }
+
+    return;
+  }
+
+  /**
+   * Get a module with the given name.
+   *
+   * @param name Module name.
+   */
+  public getModule(name: string): ModuleInterface {
+    const mod = this.modules.find((mod) => mod.name === name);
+    if (!mod) {
+      throw new Error(`Cannot find module "${name}`);
+    }
+
+    return mod;
   }
 }
