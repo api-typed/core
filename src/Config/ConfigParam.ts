@@ -12,3 +12,18 @@ export function ConfigParam<T = any>(key: string, defaultValue?: T) {
     });
   };
 }
+
+export function RequireConfigParam<T = any>(
+  key: string,
+  requiredKeys: string[] = [],
+) {
+  return function (object: unknown, propertyName: string, index?: number) {
+    Container.registerHandler({
+      object,
+      propertyName,
+      index,
+      value: (container) =>
+        container.get(AppServices.Config).getRequired<T>(key, requiredKeys),
+    });
+  };
+}

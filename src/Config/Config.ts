@@ -80,17 +80,60 @@ export class Config {
 
     // resolve <references>
     if (typeof param === 'string') {
-      param = param.replace(/<([\w\d.]+)>/g, (match, refName) => {
-        const resolved = this.get(refName);
-        if (!['string', 'number', 'undefined'].includes(typeof resolved)) {
-          throw new Error(
-            `Cannot reference non-scalar param "${refName}" while getting "${key}" config param.`,
-          );
-        }
-        return resolved;
-      });
+      param = this.resolve(param);
     }
 
     return param;
+  }
+
+  /**
+   * Return a configuration parameter and throw an error if it's not found or
+   * doesn't have the required shape.
+   *
+   * @param key Param name. Use dot notation to access nested params.
+   * @param requiredKeys If the value is an object then check for these required
+   *                     keys.
+   */
+  public getRequired<T = any>(key: string, requiredKeys: string[] = []): T {
+    const param = this.get<T>(key);
+
+    if (param === undefined || param === null) {
+      throw new Error(`Could not find required config param for ${key}`);
+    }
+
+    if (typeof param === 'object') {
+      const objKeys = Object.keys(param);
+      const missingKeys = requiredKeys.filter(
+        (requiredKey) =>
+          !objKeys.includes(requiredKey) ||
+          param[requiredKey] === undefined ||
+          param[requiredKey] === null,
+      );
+      if (missingKeys.length > 0) {
+        const missingKeysList = missingKeys.join(', ');
+        throw new Error(
+          `Config param "${key}" is missing required keys: ${missingKeysList}`,
+        );
+      }
+    }
+
+    return param;
+  }
+
+  /**
+   * Resolve <references> to config params in the given string.
+   *
+   * @param value String value.
+   */
+  public resolve(value: string): string {
+    return value.replace(/<([\w\d.]+)>/g, (match, refName) => {
+      const resolved = this.get(refName);
+      if (!['string', 'number', 'undefined'].includes(typeof resolved)) {
+        throw new Error(
+          `Cannot reference non-scalar param "${refName}" while resolving "${value}"`,
+        );
+      }
+      return resolved;
+    });
   }
 }
