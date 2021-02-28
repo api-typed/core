@@ -151,4 +151,38 @@ export abstract class App {
 
     return mod;
   }
+
+  /**
+   * Get all registered modules tagged with the given interface.
+   *
+   * @param checkMethods Method names that MUST be implemented on the module.
+   */
+  public getTaggedModules<I>(checkMethods: string | string[]): I[] {
+    const requiredMethods =
+      typeof checkMethods === 'string' ? [checkMethods] : checkMethods;
+
+    const hasInterface = (mod: any): mod is I => {
+      return requiredMethods.every((method) => method in mod);
+    };
+
+    return this.modules.filter(hasInterface) as any[];
+  }
+
+  /**
+   * Find all registered modules that are tagged with the given interface
+   * and call a loader method on them (with config as the sole argument for
+   * convenience).
+   *
+   * You SHOULD type at least the I interface.
+   *
+   * @param loaderMethod Name of the loader method that should be in the I interface.
+   */
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  public loadFromModules<I, R = Function | string>(loaderMethod: string): R[] {
+    const providers: I[] = this.getTaggedModules<I>(loaderMethod);
+
+    return providers.reduce((items, mod: I) => {
+      return [...items, ...mod[loaderMethod](this.config)];
+    }, []);
+  }
 }

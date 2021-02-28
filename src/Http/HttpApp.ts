@@ -35,8 +35,14 @@ export class HttpApp extends App {
     useContainer(Container);
 
     this.expressApp = createExpressServer({
-      controllers: this.loadControllers(),
-      middlewares: this.loadMiddlewares(),
+      // eslint-disable-next-line @typescript-eslint/ban-types
+      controllers: this.loadFromModules<HasControllers, Function>(
+        'loadControllers',
+      ),
+      // eslint-disable-next-line @typescript-eslint/ban-types
+      middlewares: this.loadFromModules<HasMiddlewares, Function>(
+        'loadMiddlewares',
+      ),
     });
     Container.set(HttpServices.ExpressApp, this.expressApp);
 
@@ -71,43 +77,5 @@ export class HttpApp extends App {
       });
       Container.set(HttpServices.ExpressServer, this.server);
     });
-  }
-
-  /**
-   * Load controllers from all modules that provide them.
-   */
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  private loadControllers(): Function[] {
-    // instanceof Interface checker
-    const hasControllers = (mod: any): mod is HasControllers => {
-      return 'loadControllers' in mod;
-    };
-
-    const controllerProviders: HasControllers[] = this.modules.filter(
-      hasControllers,
-    ) as any[];
-
-    return controllerProviders.reduce((controllers, mod: HasControllers) => {
-      return [...controllers, ...mod.loadControllers(this.config)];
-    }, []);
-  }
-
-  /**
-   * Load middlewares from all modules that provide them.
-   */
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  private loadMiddlewares(): Function[] {
-    // instanceof Interface checker
-    const hasMiddlewares = (mod: any): mod is HasMiddlewares => {
-      return 'loadMiddlewares' in mod;
-    };
-
-    const middlewareProviders: HasMiddlewares[] = this.modules.filter(
-      hasMiddlewares,
-    ) as any[];
-
-    return middlewareProviders.reduce((middlewares, mod: HasMiddlewares) => {
-      return [...middlewares, ...mod.loadMiddlewares(this.config)];
-    }, []);
   }
 }
