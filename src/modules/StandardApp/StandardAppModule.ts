@@ -1,8 +1,8 @@
-import { AbstractModule } from '../App';
-import { Config } from '../Config';
-import { HasControllers, HasMiddlewares } from '../http';
-import { loadControllers } from '../lib/loadControllers';
-import { loadMiddlewares } from '../lib/loadMiddlewares';
+import { AbstractModule } from '../../App';
+import { Config } from '../../Config';
+import { HasControllers, HasMiddlewares } from '../../http';
+import { loadControllers } from '../../lib/loadControllers';
+import { loadMiddlewares } from '../../lib/loadMiddlewares';
 
 export class StandardAppModule
   extends AbstractModule
