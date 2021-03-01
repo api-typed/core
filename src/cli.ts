@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-const [, , mode] = process.argv;
+const [, , command] = process.argv;
 
 const rootDir = process.cwd();
 
-switch (mode) {
+switch (command) {
   case 'http':
     console.log('no production http yet!');
     break;

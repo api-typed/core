@@ -25,6 +25,8 @@ export const HttpServices = {
  * Uses Express server and routing-controllers.
  */
 export class HttpApp extends App {
+  public readonly mode = 'http';
+
   private readonly expressApp: Express.Application;
 
   private server: Server;

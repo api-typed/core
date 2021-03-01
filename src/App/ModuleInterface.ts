@@ -15,4 +15,9 @@ export interface ModuleInterface {
    * Perform any initialization
    */
   init(app: App): void;
+
+  /**
+   * Perform any cleanup when the app is closing.
+   */
+  close(exitCode: number, app: App): void;
 }

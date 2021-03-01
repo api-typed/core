@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { Config } from '../Config';
 import { App } from './App';
@@ -16,4 +15,7 @@ export abstract class AbstractModule implements ModuleInterface {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public init(app: App): void {}
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public close(exitCode: number, app: App): void {}
 }

@@ -19,6 +19,14 @@ export const AppServices = {
  * Base application class that any application should extend from.
  */
 export abstract class App {
+  /**
+   * Application mode.
+   */
+  public abstract readonly mode: string;
+
+  /**
+   * Node environment.
+   */
   public readonly nodeEnv: string;
 
   /**
@@ -96,6 +104,7 @@ export abstract class App {
     // load basic framework config
     config.loadFromObject({
       appName: packageJson.name,
+      appMode: this.mode,
       version: packageJson.version,
       rootDir: this.rootDir,
       projectDir: this.projectDir,
@@ -106,7 +115,7 @@ export abstract class App {
     });
     config.loadFromFile(__dirname + '/config');
 
-    // load default configs from all the modules
+    // load configs from all the modules
     this.modules.map((mod) => mod.loadConfig(config));
 
     config.freeze();
@@ -133,6 +142,20 @@ export abstract class App {
   public async start(): Promise<unknown> {
     for (const mod of this.modules) {
       await mod.init(this);
+    }
+
+    return;
+  }
+
+  /**
+   * Stop the application.
+   *
+   * Calls close() method on all registered modules in reverse sequence.
+   */
+  public async stop(exitCode = 0): Promise<unknown> {
+    const reverseModules = [...this.modules].reverse();
+    for (const mod of reverseModules) {
+      await mod.close(exitCode, this);
     }
 
     return;

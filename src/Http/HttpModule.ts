@@ -1,7 +1,7 @@
-import { HasMiddlewares } from '.';
 import { AbstractModule } from '../App/AbstractModule';
 import { Config } from '../Config';
 import { loadMiddlewares } from '../lib/loadMiddlewares';
+import { HasMiddlewares } from './HasMiddlewares';
 
 /**
  * App module that is responsible for handling HTTP server configuration.
