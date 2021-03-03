@@ -1,2 +1,2 @@
 export * from './Config';
-export * from './ConfigParam';
+export * from './decorators/ConfigParam';

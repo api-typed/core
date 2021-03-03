@@ -1,4 +1,4 @@
 export * from './AbstractLogger';
-export * from './InjectLogger';
+export * from './decorators/InjectLogger';
 export * from './Logger';
 export * from './types';

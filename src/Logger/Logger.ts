@@ -43,7 +43,7 @@ export class Logger extends AbstractLogger {
             message: true,
             colors: {
               debug: 'dim',
-              // info: 'white',
+              info: 'white',
               notice: 'yellow',
               warning: 'yellow',
               error: 'red',
