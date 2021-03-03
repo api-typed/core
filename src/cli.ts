@@ -21,7 +21,7 @@ switch (command) {
       .on('restart', () => console.clear());
     break;
 
-  case 'cli':
   default:
-    console.log('run terminal');
+    require('ts-node/register');
+    require('./Command/run');
 }

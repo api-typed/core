@@ -23,8 +23,10 @@
     "api-typed": "bin/api-typed.js"
   },
   "dependencies": {
+    "chalk": "^4.1.0",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
+    "commander": "^7.1.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "find-package-json": "^1.2.0",
