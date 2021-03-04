@@ -1,5 +1,5 @@
 import { AbstractModule } from '../../App';
-import { HasCommands } from '../../Command';
+import { HasCommands } from '../../CommandLine';
 import { Config } from '../../Config';
 import { HasControllers, HasMiddlewares } from '../../http';
 import { loadCommands } from '../../lib/loadCommands';

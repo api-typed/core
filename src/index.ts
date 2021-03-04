@@ -2,7 +2,7 @@ import 'reflect-metadata';
 
 export * from './App';
 export * from './Bootstrap';
-export * from './Command';
+export * from './CommandLine';
 export * from './Config';
 export * from './Http';
 export * from './lib/loadControllers';

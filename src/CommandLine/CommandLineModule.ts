@@ -5,7 +5,7 @@ import { LogLevel } from '../Logger';
 /**
  * App module that is responsible for handling CLI configuration.
  */
-export class CommandModule extends AbstractModule {
+export class CommandLineModule extends AbstractModule {
   public readonly name = 'command';
 
   public loadConfig(config: Config) {

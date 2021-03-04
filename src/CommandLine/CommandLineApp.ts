@@ -4,17 +4,17 @@ import { padEnd, upperFirst } from 'lodash';
 import Container from 'typedi';
 import { App, ModuleInterface } from '../App';
 import { CommandInterface } from './CommandInterface';
-import { CommandModule } from './CommandModule';
+import { CommandLineModule } from './CommandLineModule';
 import { CommandOption } from './CommandOption';
 import { HasCommands } from './HasCommands';
 
-export class CommandApp extends App {
+export class CommandLineApp extends App {
   public readonly mode = 'cli';
 
   private readonly program = program;
 
   constructor(rootDir: string, modules: ModuleInterface[] = []) {
-    super(rootDir, [new CommandModule(), ...modules]);
+    super(rootDir, [new CommandLineModule(), ...modules]);
 
     this.program
       .addHelpText(

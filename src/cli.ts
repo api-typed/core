@@ -23,5 +23,5 @@ switch (command) {
 
   default:
     require('ts-node/register');
-    require('./Command/run');
+    require('./CommandLine/run');
 }
