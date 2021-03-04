@@ -8,4 +8,4 @@ export * from './Http';
 export * from './lib/loadControllers';
 export * from './lib/loadMiddlewares';
 export * from './Logger';
-export * from './modules/StandardApp';
+export * from './modules/StandardProject';

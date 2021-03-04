@@ -6,10 +6,10 @@ import { loadCommands } from '../../lib/loadCommands';
 import { loadControllers } from '../../lib/loadControllers';
 import { loadMiddlewares } from '../../lib/loadMiddlewares';
 
-export class StandardAppModule
+export class StandardProjectModule
   extends AbstractModule
   implements HasMiddlewares, HasControllers, HasCommands {
-  public readonly name = 'standard_app';
+  public readonly name = 'standard_project';
 
   public loadConfig(config: Config) {
     config.loadFromFile(__dirname + '/config');
@@ -17,17 +17,17 @@ export class StandardAppModule
   }
 
   public loadControllers(config: Config) {
-    const pattern = config.get<string>('standard_app.controllers');
+    const pattern = config.get<string>('standard_project.controllers');
     return loadControllers(pattern);
   }
 
   public loadMiddlewares(config: Config) {
-    const pattern = config.get<string>('standard_app.middlewares');
+    const pattern = config.get<string>('standard_project.middlewares');
     return loadMiddlewares(pattern);
   }
 
   public loadCommands(config: Config) {
-    const pattern = config.get<string>('standard_app.commands');
+    const pattern = config.get<string>('standard_project.commands');
     return loadCommands(pattern);
   }
 }
