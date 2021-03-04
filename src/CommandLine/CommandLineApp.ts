@@ -6,6 +6,7 @@ import { App, ModuleInterface } from '../App';
 import { CommandInterface } from './CommandInterface';
 import { CommandLineModule } from './CommandLineModule';
 import { CommandOption } from './CommandOption';
+import { getRegisteredCommands } from './decorators/Command';
 import { HasCommands } from './HasCommands';
 
 export class CommandLineApp extends App {
@@ -40,12 +41,19 @@ export class CommandLineApp extends App {
 
     // eslint-disable-next-line @typescript-eslint/ban-types
     this.loadFromModules<HasCommands, Function>('loadCommands');
+    getRegisteredCommands().map((cmd) =>
+      this.registerCommand(
+        cmd.target,
+        cmd.signature,
+        cmd.description,
+        cmd.options,
+      ),
+    );
   }
 
   public async start(): Promise<void> {
-    await super.start();
-
     try {
+      await super.start();
       await this.program.parseAsync(process.argv);
     } catch (e) {
       this.writeError(e.stack || e);

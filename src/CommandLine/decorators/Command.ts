@@ -1,7 +1,16 @@
-import Container from 'typedi';
-import { AppServices } from '../../App';
-import { CommandLineApp } from '../CommandLineApp';
 import { CommandOption } from '../CommandOption';
+
+interface CommandDescription {
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  target: Function;
+  signature: string;
+  description?: string;
+  options?: Record<string, CommandOption | string>;
+}
+
+const registry: CommandDescription[] = [];
+
+export const getRegisteredCommands = () => registry;
 
 export function Command(
   signature: string,
@@ -9,7 +18,11 @@ export function Command(
   options?: Record<string, CommandOption | string>,
 ): ClassDecorator {
   return function (target) {
-    const app = Container.get<CommandLineApp>(AppServices.App);
-    app.registerCommand(target, signature, description, options);
+    registry.push({
+      target,
+      signature,
+      description,
+      options,
+    });
   };
 }
