@@ -10,3 +10,4 @@ export * from './lib/loadControllers';
 export * from './lib/loadMiddlewares';
 export * from './Logger';
 export * from './modules/StandardProject';
+export * from './modules/TypeORM';
