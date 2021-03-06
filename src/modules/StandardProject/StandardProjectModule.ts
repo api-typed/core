@@ -5,10 +5,11 @@ import { HasControllers, HasMiddlewares } from '../../http';
 import { loadCommands } from '../../lib/loadCommands';
 import { loadControllers } from '../../lib/loadControllers';
 import { loadMiddlewares } from '../../lib/loadMiddlewares';
+import { HasEntities } from '../TypeORM';
 
 export class StandardProjectModule
   extends AbstractModule
-  implements HasMiddlewares, HasControllers, HasCommands {
+  implements HasMiddlewares, HasControllers, HasCommands, HasEntities {
   public readonly name = 'standard_project';
 
   public loadConfig(config: Config) {
@@ -29,5 +30,10 @@ export class StandardProjectModule
   public loadCommands(config: Config) {
     const pattern = config.get<string>('standard_project.commands');
     return loadCommands(pattern);
+  }
+
+  public loadEntities(config: Config): string[] {
+    const pattern = config.get<string>('standard_project.entities');
+    return [pattern];
   }
 }
