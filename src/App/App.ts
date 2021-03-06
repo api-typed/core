@@ -30,21 +30,6 @@ export abstract class App {
   public readonly nodeEnv: string;
 
   /**
-   * Application's root dir.
-   */
-  public readonly rootDir;
-
-  /**
-   * The project dir, usually where package.json and .env files are located.
-   */
-  public readonly projectDir;
-
-  /**
-   * Cache dir for saving various files.
-   */
-  public readonly cacheDir;
-
-  /**
    * Loaded modules.
    */
   public readonly modules: ModuleInterface[];
@@ -76,14 +61,16 @@ export abstract class App {
     Container.set(AppServices.App, this);
 
     this.nodeEnv = process.env.NODE_ENV || 'development';
-    this.rootDir = rootDir;
-    this.projectDir = path.dirname(packageJsonPath);
-    this.cacheDir = path.resolve(this.projectDir, 'cache');
     this.modules = modules;
 
-    const envFiles = loadEnvFiles(this.nodeEnv, this.projectDir);
+    const projectDir = path.dirname(packageJsonPath);
+    const envFiles = loadEnvFiles(this.nodeEnv, projectDir);
 
-    this.config = this.initConfig();
+    this.config = this.initConfig({
+      rootDir,
+      projectDir,
+      cacheDir: path.resolve(projectDir, 'cache'),
+    });
     Container.set(AppServices.Config, this.config);
 
     this.logger = this.initLogger();
@@ -101,20 +88,17 @@ export abstract class App {
   /**
    * Initializes application configuration.
    */
-  private initConfig(): Config {
+  private initConfig(initial: Record<string, any> = {}): Config {
     const config = new Config();
 
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const packageJson = require(path.join(this.projectDir, 'package.json'));
+    const packageJson = require(path.join(initial.projectDir, 'package.json'));
 
     // load basic framework config
     config.loadFromObject({
+      ...initial,
       appName: packageJson.name,
-      appMode: this.mode,
       version: packageJson.version,
-      rootDir: this.rootDir,
-      cacheDir: this.cacheDir,
-      projectDir: this.projectDir,
       env: this.nodeEnv,
       isProduction: this.nodeEnv === 'production',
       isDevelopment: this.nodeEnv === 'development',
