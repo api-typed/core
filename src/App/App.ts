@@ -40,6 +40,11 @@ export abstract class App {
   public readonly projectDir;
 
   /**
+   * Cache dir for saving various files.
+   */
+  public readonly cacheDir;
+
+  /**
    * Loaded modules.
    */
   public readonly modules: ModuleInterface[];
@@ -73,6 +78,7 @@ export abstract class App {
     this.nodeEnv = process.env.NODE_ENV || 'development';
     this.rootDir = rootDir;
     this.projectDir = path.dirname(packageJsonPath);
+    this.cacheDir = path.resolve(this.projectDir, 'cache');
     this.modules = modules;
 
     const envFiles = loadEnvFiles(this.nodeEnv, this.projectDir);
@@ -107,6 +113,7 @@ export abstract class App {
       appMode: this.mode,
       version: packageJson.version,
       rootDir: this.rootDir,
+      cacheDir: this.cacheDir,
       projectDir: this.projectDir,
       env: this.nodeEnv,
       isProduction: this.nodeEnv === 'production',

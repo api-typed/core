@@ -2,6 +2,7 @@ import 'reflect-metadata';
 
 export * from './App';
 export * from './Bootstrap';
+export * from './Cache';
 export * from './CommandLine';
 export * from './Config';
 export * from './Http';
