@@ -1,5 +1,7 @@
 # 🥣 Api-Typed Framework
 
+🔥 **Early Alpha / PoC** - try at your own risk
+
 Opinionated TypeScript framework built on the shoulders of giants.
 
 Api-Typed combines several popular librariers into one framework removing the overhead of setting up a new project and wiring things up together:
