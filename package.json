@@ -1,21 +1,32 @@
 {
   "name": "@api-typed/framework",
   "version": "0.0.1",
-  "description": "Opinionated framework for building web apps in TypeScript using popular libraries.",
-  "author": "Michal Palys-Dudek <michal@pnd.io>",
+  "description": "Opinionated TypeScript framework built on the shoulders of giants.",
+  "author": {
+    "name": "Michal Palys-Dudek",
+    "email": "michal@pnd.io"
+  },
   "license": "MIT",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
   "keywords": [
     "api",
     "typescript",
     "routing-controllers",
     "di",
-    "typedi"
+    "typedi",
+    "framework"
   ],
+  "homepage": "https://github.com/api-typed/framework#readme",
+  "bugs": "https://github.com/api-typed/framework/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/api-typed/framework.git"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "rimraf dist && tsc",
     "dev": "tsc --watch",
+    "prepare": "npm run test && npm run build",
     "test:coverage": "jest --coverage",
     "test": "jest"
   },
