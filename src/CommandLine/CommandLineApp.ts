@@ -39,7 +39,6 @@ export class CommandLineApp extends App {
         this.stop(error.exitCode);
       });
 
-    // eslint-disable-next-line @typescript-eslint/ban-types
     this.loadFromModules<HasCommands, Function>('loadCommands');
     getRegisteredCommands().map((cmd) =>
       this.registerCommand(
@@ -66,7 +65,6 @@ export class CommandLineApp extends App {
     process.exit(exitCode);
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
   public registerCommand<TFunction extends Function>(
     target: TFunction,
     signature: string,

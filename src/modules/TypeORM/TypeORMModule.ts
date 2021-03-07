@@ -20,7 +20,6 @@ export class TypeORMModule extends AbstractModule implements HasCommands {
 
   private migrations: string[] = [];
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
   private subscribers: (Function | string)[] = [];
 
   private connection: Connection;
@@ -71,7 +70,6 @@ export class TypeORMModule extends AbstractModule implements HasCommands {
     return this.migrations;
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
   public getSubscribers(): (Function | string)[] {
     return this.subscribers;
   }

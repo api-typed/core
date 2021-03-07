@@ -24,6 +24,7 @@ module.exports = {
     'import/extensions': 'off',
     'class-methods-use-this': 'off',
     'no-unused-vars': 'off',
+    '@typescript-eslint/ban-types': 'off',
     '@typescript-eslint/no-unused-vars': ['error'],
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',

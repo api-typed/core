@@ -191,7 +191,6 @@ export abstract class App {
    *
    * @param loaderMethod Name of the loader method that should be in the I interface.
    */
-  // eslint-disable-next-line @typescript-eslint/ban-types
   public loadFromModules<I, R = Function | string>(loaderMethod: string): R[] {
     const providers: I[] = this.getTaggedModules<I>(loaderMethod);
 

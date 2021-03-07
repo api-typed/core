@@ -37,11 +37,9 @@ export class HttpApp extends App {
     useContainer(Container);
 
     this.expressApp = createExpressServer({
-      // eslint-disable-next-line @typescript-eslint/ban-types
       controllers: this.loadFromModules<HasControllers, Function>(
         'loadControllers',
       ),
-      // eslint-disable-next-line @typescript-eslint/ban-types
       middlewares: this.loadFromModules<HasMiddlewares, Function>(
         'loadMiddlewares',
       ),

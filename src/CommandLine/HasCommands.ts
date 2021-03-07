@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
 import { Config } from '../Config';
 
 export interface HasCommands {

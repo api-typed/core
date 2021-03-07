@@ -1,7 +1,6 @@
 import { CommandOption } from '../CommandOption';
 
 interface CommandDescription {
-  // eslint-disable-next-line @typescript-eslint/ban-types
   target: Function;
   signature: string;
   description?: string;
