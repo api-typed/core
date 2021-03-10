@@ -5,7 +5,7 @@ export * from './Bootstrap';
 export * from './Cache';
 export * from './CommandLine';
 export * from './Config';
-export * from './Events';
+export * from './EventDispatcher';
 export * from './Http';
 export * from './lib/loadControllers';
 export * from './lib/loadMiddlewares';

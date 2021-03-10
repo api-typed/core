@@ -1,7 +1,7 @@
 import { Service } from 'typedi';
 import { ClassName } from '../lib/ClassName';
 
-export type EventHandler<T> = (event: T) => Promise<void> | void;
+type EventHandler<T> = (event: T) => Promise<void> | void;
 
 type EventHandlers<T> = {
   type: ClassName<T>;
@@ -9,8 +9,22 @@ type EventHandlers<T> = {
 };
 
 @Service()
-export class EventSubscriber {
+export class EventDispatcher {
   private readonly eventHandlers: EventHandlers<any>[] = [];
+
+  public async dispatch<T extends new (...args: any) => any>(
+    eventType: T,
+    ...args: ConstructorParameters<T>
+  ): Promise<InstanceType<T>> {
+    const event = new eventType(...(args as any[]));
+
+    const handlers = this.getEventHandlers<T>(eventType);
+    for (const handler of handlers) {
+      await handler(event);
+    }
+
+    return event;
+  }
 
   public on<T>(eventType: ClassName<T>, handler: EventHandler<T>): void {
     this.getEventHandlers(eventType).push(handler);
@@ -19,6 +33,12 @@ export class EventSubscriber {
   public off<T>(eventType: ClassName<T>, handler: EventHandler<T>): void {
     const metadata = this.getEventHandlersMetadata(eventType);
     metadata.handlers = metadata.handlers.filter((h) => h !== handler);
+  }
+
+  public getEventHandlers<T>(
+    eventType: ClassName<T>,
+  ): EventHandlers<T>['handlers'] {
+    return this.getEventHandlersMetadata(eventType).handlers;
   }
 
   private getEventHandlersMetadata<T>(
@@ -40,11 +60,5 @@ export class EventSubscriber {
     this.eventHandlers.push(theEventHandlers);
 
     return theEventHandlers;
-  }
-
-  public getEventHandlers<T>(
-    eventType: ClassName<T>,
-  ): EventHandlers<T>['handlers'] {
-    return this.getEventHandlersMetadata(eventType).handlers;
   }
 }

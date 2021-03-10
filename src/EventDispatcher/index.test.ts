@@ -1,5 +1,4 @@
 import { EventDispatcher } from './EventDispatcher';
-import { EventSubscriber } from './EventSubscriber';
 
 class TestEvent {
   constructor(public testValue: string) {}
@@ -10,8 +9,7 @@ class OtherEvent {
 }
 
 describe('Events system', (): void => {
-  const eventSubscriber = new EventSubscriber();
-  const eventDispatcher = new EventDispatcher(eventSubscriber);
+  const eventDispatcher = new EventDispatcher();
 
   test('dispatching an event creates and returns it', async (): Promise<void> => {
     const event = await eventDispatcher.dispatch(TestEvent, 'create');
@@ -21,10 +19,10 @@ describe('Events system', (): void => {
 
   test('listens for a dispatched event', async (): Promise<void> => {
     const listener = jest.fn();
-    eventSubscriber.on(TestEvent, listener);
+    eventDispatcher.on(TestEvent, listener);
 
     const handler = jest.fn();
-    eventSubscriber.on(TestEvent, (event) => {
+    eventDispatcher.on(TestEvent, (event) => {
       handler(event.testValue);
     });
 
@@ -44,8 +42,8 @@ describe('Events system', (): void => {
     const handler = jest.fn();
     const otherHandler = jest.fn();
 
-    eventSubscriber.on(TestEvent, handler);
-    eventSubscriber.on(OtherEvent, otherHandler);
+    eventDispatcher.on(TestEvent, handler);
+    eventDispatcher.on(OtherEvent, otherHandler);
 
     await eventDispatcher.dispatch(TestEvent, 'no-other');
 
@@ -58,8 +56,8 @@ describe('Events system', (): void => {
     const handler2 = jest.fn();
     const RenamedTestEvent = TestEvent;
 
-    eventSubscriber.on(TestEvent, handler);
-    eventSubscriber.on(RenamedTestEvent, handler2);
+    eventDispatcher.on(TestEvent, handler);
+    eventDispatcher.on(RenamedTestEvent, handler2);
 
     await eventDispatcher.dispatch(RenamedTestEvent, 'renamed');
 
@@ -72,8 +70,8 @@ describe('Events system', (): void => {
     const handler2 = jest.fn();
     const RenamedTestEvent = TestEvent;
 
-    eventSubscriber.on(RenamedTestEvent, handler);
-    eventSubscriber.on(TestEvent, handler2);
+    eventDispatcher.on(RenamedTestEvent, handler);
+    eventDispatcher.on(TestEvent, handler2);
 
     await eventDispatcher.dispatch(TestEvent, 'renamed');
 
@@ -84,11 +82,11 @@ describe('Events system', (): void => {
   test('unregisters a handler', async (): Promise<void> => {
     const handler = jest.fn();
 
-    eventSubscriber.on(TestEvent, handler);
+    eventDispatcher.on(TestEvent, handler);
 
     await eventDispatcher.dispatch(TestEvent, 'on');
 
-    eventSubscriber.off(TestEvent, handler);
+    eventDispatcher.off(TestEvent, handler);
 
     await eventDispatcher.dispatch(TestEvent, 'off');
 
