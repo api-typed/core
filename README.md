@@ -1,5 +1,8 @@
 # 🥣 Api-Typed Framework
 
+![Tests](https://github.com/api-typed/framework/actions/workflows/tests.yml/badge.svg?branch=main)
+![Lint](https://github.com/api-typed/framework/actions/workflows/lint.yml/badge.svg?branch=main)
+
 🔥 **Early Alpha / PoC** - try at your own risk
 
 Opinionated TypeScript framework built on the shoulders of giants.
