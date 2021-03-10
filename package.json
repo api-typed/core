@@ -26,6 +26,7 @@
   "scripts": {
     "build": "rimraf dist && tsc",
     "dev": "tsc --watch",
+    "lint": "eslint ./src",
     "prepare": "npm run test && npm run build",
     "test:coverage": "jest --coverage",
     "test": "jest"
