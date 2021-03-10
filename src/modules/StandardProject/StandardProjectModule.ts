@@ -1,7 +1,7 @@
 import { AbstractModule } from '../../App';
 import { HasCommands } from '../../CommandLine';
 import { Config } from '../../Config';
-import { HasControllers, HasMiddlewares } from '../../http';
+import { HasControllers, HasMiddlewares } from '../../Http';
 import { loadCommands } from '../../lib/loadCommands';
 import { loadControllers } from '../../lib/loadControllers';
 import { loadMiddlewares } from '../../lib/loadMiddlewares';
