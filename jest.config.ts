@@ -6,7 +6,7 @@ export default {
     '^.+\\.(ts|js)$': 'ts-jest',
   },
   collectCoverageFrom: ['src/**/*.(ts|js)'],
-  coverageDirectory: '<rootDir>/../coverage',
+  coverageDirectory: '<rootDir>/coverage',
   testEnvironment: 'node',
   setupFilesAfterEnv: ['./jest.setup.ts'],
 };
