@@ -1,12 +1,14 @@
+import * as path from 'path';
+
 export default {
   moduleFileExtensions: ['js', 'json', 'ts'],
-  rootDir: __dirname,
+  rootDir: path.resolve(__dirname, 'src'),
   testRegex: '.*\\.(spec|test)\\.ts$',
   transform: {
     '^.+\\.(ts|js)$': 'ts-jest',
   },
-  collectCoverageFrom: ['src/**/*.(ts|js)'],
-  coverageDirectory: '<rootDir>/coverage',
+  collectCoverageFrom: ['<rootDir>/**/*.(ts|js)'],
+  coverageDirectory: '<rootDir>/../coverage',
   testEnvironment: 'node',
-  setupFilesAfterEnv: ['./jest.setup.ts'],
+  setupFilesAfterEnv: ['<rootDir>/../jest.setup.ts'],
 };
