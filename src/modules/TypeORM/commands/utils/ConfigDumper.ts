@@ -1,5 +1,5 @@
 import { Inject, Service } from 'typedi';
-import { App, AppServices } from '../../../../App';
+import { App } from '../../../../App';
 import { FileCache } from '../../../../Cache';
 import { ConfigParam } from '../../../../Config';
 import { TypeORMModule } from '../../TypeORMModule';
@@ -9,7 +9,7 @@ export class ConfigDumper {
   private readonly path = 'typeorm/ormconfig.js';
 
   constructor(
-    @Inject(AppServices.App) private readonly app: App,
+    @Inject(() => App) private readonly app: App,
     @Inject(() => FileCache) private readonly fileCache: FileCache,
     @ConfigParam('typeorm.connection') private readonly connectionInfo,
     @ConfigParam('typeorm.migrationsDir') private readonly migrationsDir,

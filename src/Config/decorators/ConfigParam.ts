@@ -1,5 +1,5 @@
 import Container from 'typedi';
-import { AppServices } from '../../App';
+import { Config } from '../Config';
 
 export function ConfigParam<T = any>(key: string, defaultValue?: T) {
   return function (object: unknown, propertyName: string, index?: number) {
@@ -7,8 +7,7 @@ export function ConfigParam<T = any>(key: string, defaultValue?: T) {
       object,
       propertyName,
       index,
-      value: (container) =>
-        container.get(AppServices.Config).get<T>(key, defaultValue),
+      value: (container) => container.get(Config).get<T>(key, defaultValue),
     });
   };
 }
@@ -23,7 +22,7 @@ export function RequireConfigParam<T = any>(
       propertyName,
       index,
       value: (container) =>
-        container.get(AppServices.Config).getRequired<T>(key, requiredKeys),
+        container.get(Config).getRequired<T>(key, requiredKeys),
     });
   };
 }

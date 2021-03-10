@@ -1,5 +1,5 @@
 import Container from 'typedi';
-import { AppServices } from '../../App';
+import { Logger } from '../Logger';
 
 export function InjectLogger() {
   return function (object: unknown, propertyName: string, index?: number) {
@@ -7,7 +7,7 @@ export function InjectLogger() {
       object,
       propertyName,
       index,
-      value: (container) => container.get(AppServices.Logger),
+      value: (container) => container.get(Logger),
     });
   };
 }

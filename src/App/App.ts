@@ -3,17 +3,8 @@ import * as path from 'path';
 import { Config } from '../Config';
 import { loadEnvFiles } from '../lib/loadEnvFiles';
 import { LogFormat, Logger, LoggerInterface, LogLevel } from '../Logger';
-import Container, { Token } from '../proxy/typedi';
+import Container from '../proxy/typedi';
 import { ModuleInterface } from './ModuleInterface';
-
-/**
- * Names of services registered by the application.
- */
-export const AppServices = {
-  App: new Token<App>('app'),
-  Config: new Token<Config>('config'),
-  Logger: new Token<LoggerInterface>('logger'),
-};
 
 /**
  * Base application class that any application should extend from.
@@ -58,7 +49,7 @@ export abstract class App {
       );
     }
 
-    Container.set(AppServices.App, this);
+    Container.set(App, this);
 
     this.nodeEnv = process.env.NODE_ENV || 'development';
     this.modules = modules;
@@ -71,10 +62,10 @@ export abstract class App {
       projectDir,
       cacheDir: path.resolve(projectDir, 'cache'),
     });
-    Container.set(AppServices.Config, this.config);
+    Container.set(Config, this.config);
 
     this.logger = this.initLogger();
-    Container.set(AppServices.Logger, this.logger);
+    Container.set(Logger, this.logger);
 
     this.logger.debug('Application initialized');
     this.logger.debug('Loaded env files', {
