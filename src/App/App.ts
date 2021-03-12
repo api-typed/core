@@ -1,9 +1,9 @@
 import * as findPackageJson from 'find-package-json';
 import * as path from 'path';
+import Container from 'typedi';
 import { Config } from '../Config';
 import { loadEnvFiles } from '../lib/loadEnvFiles';
 import { LogFormat, Logger, LoggerInterface, LogLevel } from '../Logger';
-import Container from '../proxy/typedi';
 import { ModuleInterface } from './ModuleInterface';
 
 /**

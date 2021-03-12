@@ -1,12 +1,9 @@
 import * as Express from 'express';
 import { Server } from 'net';
+import { createExpressServer, useContainer } from 'routing-controllers';
+import Container, { Token } from 'typedi';
 import { ModuleInterface } from '../App';
 import { App } from '../App/App';
-import {
-  createExpressServer,
-  useContainer,
-} from '../proxy/routing-controllers';
-import Container, { Token } from '../proxy/typedi';
 import { HasControllers } from './HasControllers';
 import { HasMiddlewares } from './HasMiddlewares';
 import { HttpModule } from './HttpModule';

@@ -27,7 +27,7 @@
     "build": "rimraf dist && tsc",
     "dev": "tsc --watch",
     "lint": "eslint ./src",
-    "prepare": "npm run test && npm run build",
+    "prepack": "npm run test && npm run build",
     "test:coverage": "jest --coverage",
     "test": "jest"
   },
@@ -36,8 +36,6 @@
   },
   "dependencies": {
     "chalk": "^4.1.0",
-    "class-transformer": "^0.4.0",
-    "class-validator": "^0.13.1",
     "commander": "^7.1.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
@@ -48,14 +46,18 @@
     "nodemon": "^2.0.7",
     "pg": "^8.5.1",
     "reflect-metadata": "^0.1.13",
-    "routing-controllers": "^0.9.0",
     "serve-favicon": "^2.5.0",
     "triple-beam": "^1.3.0",
+    "winston": "^3.3.3"
+  },
+  "peerDependencies": {
+    "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.1",
+    "routing-controllers": "^0.9.0",
     "typedi": "0.8.0",
     "typeorm": "^0.2.31",
     "typeorm-routing-controllers-extensions": "^0.2.0",
-    "typeorm-typedi-extensions": "^0.4.1",
-    "winston": "^3.3.3"
+    "typeorm-typedi-extensions": "^0.4.1"
   },
   "devDependencies": {
     "@types/express": "^4.17.11",
@@ -69,17 +71,24 @@
     "@types/winston": "^2.4.4",
     "@typescript-eslint/eslint-plugin": "^4.15.1",
     "@typescript-eslint/parser": "^4.15.1",
-    "eslint": "^7.20.0",
+    "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.1",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^7.2.0",
     "eslint-import-resolver-typescript": "^2.4.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-prettier": "^3.3.1",
+    "eslint": "^7.20.0",
     "jest": "^26.6.3",
     "prettier": "^2.2.1",
     "rimraf": "^3.0.2",
+    "routing-controllers": "^0.9.0",
     "ts-jest": "^26.5.1",
     "ts-node": "^9.1.1",
+    "typedi": "0.8.0",
+    "typeorm-routing-controllers-extensions": "^0.2.0",
+    "typeorm-typedi-extensions": "^0.4.1",
+    "typeorm": "^0.2.31",
     "typescript": "4.1.5"
   }
 }

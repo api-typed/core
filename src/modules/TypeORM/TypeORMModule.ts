@@ -1,12 +1,8 @@
 import Container from 'typedi';
+import { Connection, createConnection, useContainer } from 'typeorm';
 import { AbstractModule, App } from '../../App';
 import { HasCommands } from '../../CommandLine';
 import { Config } from '../../Config';
-import {
-  Connection,
-  createConnection,
-  useContainer,
-} from '../../proxy/typeorm';
 import { GenerateMigration } from './commands/GenerateMigration';
 import { Migrate } from './commands/Migrate';
 import { Revert } from './commands/Revert';

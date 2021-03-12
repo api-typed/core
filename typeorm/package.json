@@ -1,4 +1,0 @@
-{
-  "main": "../dist/proxy/typeorm.js",
-  "types": "../dist/proxy/typeorm.d.ts"
-}
