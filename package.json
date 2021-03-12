@@ -28,6 +28,8 @@
     "dev": "tsc --watch",
     "lint": "eslint ./src",
     "prepack": "npm run test && npm run build",
+    "test:app": "npx api-typed http-dev-fixture",
+    "test:db": "docker-compose up",
     "test:coverage": "jest --coverage",
     "test": "jest"
   },
