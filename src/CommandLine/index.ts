@@ -1,4 +1,3 @@
-export * from './CommandInterface';
-export * from './CommandLineApp';
+export * from './CommandLineModule';
 export * from './decorators/Command';
-export * from './HasCommands';
+export * from './types';

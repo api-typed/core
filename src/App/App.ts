@@ -4,21 +4,21 @@ import Container from 'typedi';
 import { Config } from '../Config';
 import { loadEnvFiles } from '../lib/loadEnvFiles';
 import { LogFormat, Logger, LoggerInterface, LogLevel } from '../Logger';
-import { ModuleInterface } from './ModuleInterface';
+import { AppDelegate, AppRunMode, ModuleInterface } from './types';
 
 /**
  * Base application class that any application should extend from.
  */
-export abstract class App {
+export class App {
   /**
-   * Application mode.
+   * Run mode.
    */
-  public abstract readonly mode: string;
+  private runMode: AppRunMode;
 
   /**
-   * Node environment.
+   * App delegate responsible for running the app in the current mode.
    */
-  public readonly nodeEnv: string;
+  private delegate: AppDelegate;
 
   /**
    * Loaded modules.
@@ -49,15 +49,17 @@ export abstract class App {
       );
     }
 
-    Container.set(App, this);
-
-    this.nodeEnv = process.env.NODE_ENV || 'development';
     this.modules = modules;
 
+    Container.set(App, this);
+
+    const nodeEnv = process.env.NODE_ENV || 'development';
+
     const projectDir = path.dirname(packageJsonPath);
-    const envFiles = loadEnvFiles(this.nodeEnv, projectDir);
+    const envFiles = loadEnvFiles(nodeEnv, projectDir);
 
     this.config = this.initConfig({
+      env: nodeEnv,
       rootDir,
       projectDir,
       cacheDir: path.resolve(projectDir, 'cache'),
@@ -67,11 +69,13 @@ export abstract class App {
     this.logger = this.initLogger();
     Container.set(Logger, this.logger);
 
-    this.logger.debug('Application initialized');
-    this.logger.debug('Loaded env files', {
+    const appName = this.config.get('appName');
+    const version = this.config.get('version');
+    this.logger.debug(`Application "${appName}" (v${version}) initialized`);
+    this.logger.debug('Loaded env files:', {
       data: envFiles,
     });
-    this.logger.debug('Loaded modules', {
+    this.logger.debug('Loaded modules:', {
       data: this.modules.map((mod) => mod.name),
     });
   }
@@ -90,10 +94,9 @@ export abstract class App {
       ...initial,
       appName: packageJson.name,
       version: packageJson.version,
-      env: this.nodeEnv,
-      isProduction: this.nodeEnv === 'production',
-      isDevelopment: this.nodeEnv === 'development',
-      isTest: this.nodeEnv === 'test',
+      isProduction: initial.env === 'production',
+      isDevelopment: initial.env === 'development',
+      isTest: initial.env === 'test',
     });
     config.loadFromFile(__dirname + '/config');
 
@@ -111,8 +114,8 @@ export abstract class App {
   private initLogger(): LoggerInterface {
     return new Logger(
       this.config.get<string>('appName'),
-      this.config.get<LogLevel>('log.level'),
-      this.config.get<LogFormat>('log.format'),
+      this.config.get<LogLevel>('log_level'),
+      this.config.get<LogFormat>('log_format'),
     );
   }
 
@@ -121,12 +124,44 @@ export abstract class App {
    *
    * Calls init() method on all registered modules in sequence.
    */
-  public async start(): Promise<unknown> {
+  public async start(runMode: AppRunMode): Promise<void> {
+    this.runMode = runMode;
+
+    const delegates: {
+      moduleName: string;
+      delegate: AppDelegate;
+    }[] = [];
     for (const mod of this.modules) {
-      await mod.init(this);
+      const delegate = await mod.init(this);
+      if (delegate) {
+        delegates.push({
+          moduleName: mod.name,
+          delegate,
+        });
+      }
     }
 
-    return;
+    if (delegates.length === 0) {
+      throw new Error(
+        `No module returned an app delegate for ${runMode} run mode. Have you registered all modules you want?`,
+      );
+    }
+
+    if (delegates.length > 1) {
+      const delegateModuleNames = delegates
+        .map((info) => info.moduleName)
+        .join(', ');
+      throw new Error(
+        `More than one module returned a delegate for ${runMode} run mode, but only one is allowed. Check init() method of modules ${delegateModuleNames}.`,
+      );
+    }
+
+    this.delegate = delegates[0].delegate;
+    const delegateModuleName = delegates[0].moduleName;
+
+    this.logger.debug(`App start delegated to module "${delegateModuleName}"`);
+
+    await this.delegate.start();
   }
 
   /**
@@ -134,13 +169,20 @@ export abstract class App {
    *
    * Calls close() method on all registered modules in reverse sequence.
    */
-  public async stop(exitCode = 0): Promise<unknown> {
+  public async stop(exitCode = 0): Promise<void> {
     const reverseModules = [...this.modules].reverse();
     for (const mod of reverseModules) {
       await mod.close(exitCode, this);
     }
 
-    return;
+    await this.delegate.stop(exitCode);
+  }
+
+  /**
+   * What is the run mode?
+   */
+  public getRunMode(): AppRunMode {
+    return this.runMode;
   }
 
   /**

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { Config } from '../Config';
 import { App } from './App';
-import { ModuleInterface } from './ModuleInterface';
+import { ModuleInterface } from './types';
 
 /**
  * Convenient abstract AppModule that implements the interface with no-op methods,

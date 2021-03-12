@@ -1,4 +1,4 @@
-import { CommandOption } from '../CommandOption';
+import { CommandOption } from '../types';
 
 interface CommandDescription {
   target: Function;
