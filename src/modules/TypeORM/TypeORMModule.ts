@@ -6,8 +6,7 @@ import { Config } from '../../Config';
 import { GenerateMigration } from './commands/GenerateMigration';
 import { Migrate } from './commands/Migrate';
 import { Revert } from './commands/Revert';
-import { HasEntities } from './HasEntities';
-import { HasEntitySubscribers } from './HasEntitySubscribers';
+import { HasEntities, HasEntitySubscribers } from './types';
 
 export class TypeORMModule extends AbstractModule implements HasCommands {
   public readonly name = 'typeorm';
