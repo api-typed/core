@@ -1,14 +1,3 @@
-import {
-  App,
-  CommandLineModule,
-  HttpModule,
-  StandardProjectModule,
-  TypeORMModule,
-} from '../../src';
+import { StandardProjectApp } from '../../src';
 
-export default new App(__dirname, [
-  new HttpModule(),
-  new CommandLineModule(),
-  new TypeORMModule(),
-  new StandardProjectModule(),
-]);
+export default new StandardProjectApp(__dirname);
