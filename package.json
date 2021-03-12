@@ -1,6 +1,6 @@
 {
   "name": "@api-typed/framework",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Opinionated TypeScript framework built on the shoulders of giants.",
   "author": {
     "name": "Michal Palys-Dudek",
