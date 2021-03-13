@@ -1,6 +1,7 @@
 # 🥣 Api-Typed Framework
 
 ![Tests](https://github.com/api-typed/framework/actions/workflows/tests.yml/badge.svg?branch=main)
+![E2E Tests](https://github.com/api-typed/framework/actions/workflows/e2e-tests.yml/badge.svg?branch=main)
 ![Lint](https://github.com/api-typed/framework/actions/workflows/lint.yml/badge.svg?branch=main)
 [![codecov](https://codecov.io/gh/api-typed/framework/branch/main/graph/badge.svg?token=XF35AW6T60)](https://codecov.io/gh/api-typed/framework)
 
