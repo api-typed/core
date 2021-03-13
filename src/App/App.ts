@@ -1,6 +1,6 @@
 import * as findPackageJson from 'find-package-json';
 import * as path from 'path';
-import Container from 'typedi';
+import Container, { ObjectType, Token } from 'typedi';
 import { Config } from '../Config';
 import { loadEnvFiles } from '../lib/loadEnvFiles';
 import { LogFormat, Logger, LoggerInterface, LogLevel } from '../Logger';
@@ -237,5 +237,18 @@ export class App {
     return providers.reduce((items, mod: I) => {
       return [...items, ...mod[loaderMethod](this.config)];
     }, []);
+  }
+
+  /**
+   * Get a service from the DI container.
+   */
+  public get<T = any>(identifier: ObjectType<T> | Token<T> | string): T {
+    if (typeof identifier === 'string') {
+      return Container.get(identifier);
+    }
+    if (identifier instanceof Token) {
+      return Container.get(identifier);
+    }
+    return Container.get(identifier);
   }
 }
