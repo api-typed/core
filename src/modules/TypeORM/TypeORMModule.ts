@@ -3,8 +3,8 @@ import { Connection, createConnection, useContainer } from 'typeorm';
 import { AbstractModule, App } from '../../App';
 import { HasCommands } from '../../CommandLine';
 import { Config } from '../../Config';
-import { GenerateMigration } from './commands/GenerateMigration';
 import { Migrate } from './commands/Migrate';
+import { Migration } from './commands/Migration';
 import { Revert } from './commands/Revert';
 import { HasEntities, HasEntitySubscribers } from './types';
 
@@ -24,7 +24,7 @@ export class TypeORMModule extends AbstractModule implements HasCommands {
   }
 
   public loadCommands() {
-    return [GenerateMigration, Migrate, Revert];
+    return [Migration, Migrate, Revert];
   }
 
   public async init(app: App): Promise<void> {
