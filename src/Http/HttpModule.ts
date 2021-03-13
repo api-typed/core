@@ -74,15 +74,17 @@ export class HttpModule
     }
   }
 
-  public async start(): Promise<void> {
-    const port = this.app.config.get<number>('http.port');
+  public async start(): Promise<Express.Application> {
     await new Promise((resolve) => {
+      const port = this.app.config.get<number>('http.port');
       this.server = this.expressApp.listen(port, () => {
         this.app.logger.info(`HTTP server listening on port :${port}`);
         resolve(this.server);
       });
       Container.set(HttpServices.ExpressServer, this.server);
     });
+
+    return this.expressApp;
   }
 
   public async stop(): Promise<void> {
