@@ -1,6 +1,6 @@
 # env files
 .env.local
-.env.development.local
+.env.*.local
 
 # compiled output
 dist

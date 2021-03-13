@@ -1,6 +1,7 @@
 export type LogMessageData = Record<string, unknown>;
 
 export enum LogLevel {
+  none = 'none',
   debug = 'debug',
   info = 'info',
   notice = 'notice',

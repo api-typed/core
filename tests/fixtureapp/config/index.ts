@@ -1,6 +1,6 @@
 export default {
   appName: 'Api-Typed Test Fixture App',
-  log_level: 'debug',
+  log_level: process.env.LOG_LEVEL || 'debug',
   typeorm: {
     connection: {
       // match what's in docker-compose.yml

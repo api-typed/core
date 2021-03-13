@@ -19,6 +19,8 @@ export class Logger extends AbstractLogger {
 
   private readonly channel: string;
 
+  private readonly level: LogLevel;
+
   constructor(
     channel: string,
     level: LogLevel = LogLevel.info,
@@ -27,6 +29,7 @@ export class Logger extends AbstractLogger {
     super();
 
     this.channel = channel;
+    this.level = level;
 
     this.logger = createWinstonLogger({
       level,
@@ -66,6 +69,10 @@ export class Logger extends AbstractLogger {
     message: string,
     data: LogMessageData = {},
   ): void {
+    if (this.level === LogLevel.none) {
+      return;
+    }
+
     this.logger.log(level, message, { channel: this.channel, ...data });
   }
 }
