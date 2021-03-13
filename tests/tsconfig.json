@@ -8,5 +8,5 @@
     "baseUrl": "../",
     "incremental": true
   },
-  "include": ["./**/*"]
+  "include": ["./**/*", "../jest.e2e.config.ts"]
 }

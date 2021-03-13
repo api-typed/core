@@ -11,3 +11,4 @@ export * from './lib/loadMiddlewares';
 export * from './Logger';
 export * from './modules/StandardProject';
 export * from './modules/TypeORM';
+export * from './Testing';
