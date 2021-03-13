@@ -7,7 +7,7 @@ export enum AppRunMode {
 }
 
 export interface AppDelegate {
-  start: () => Promise<void>;
+  start: () => Promise<unknown>;
   stop: (exitCode: number) => Promise<void>;
 }
 

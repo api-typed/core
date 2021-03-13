@@ -124,7 +124,7 @@ export class App {
    *
    * Calls init() method on all registered modules in sequence.
    */
-  public async start(runMode: AppRunMode): Promise<void> {
+  public async start(runMode: AppRunMode): Promise<unknown> {
     this.runMode = runMode;
 
     const delegates: {
@@ -161,7 +161,7 @@ export class App {
 
     this.logger.debug(`App start delegated to module "${delegateModuleName}"`);
 
-    await this.delegate.start();
+    return this.delegate.start();
   }
 
   /**
@@ -181,8 +181,15 @@ export class App {
   /**
    * What is the run mode?
    */
-  public getRunMode(): AppRunMode {
+  public getRunMode(): AppRunMode | undefined {
     return this.runMode;
+  }
+
+  /**
+   * Return the assigned delegate.
+   */
+  public getDelegate(): AppDelegate | undefined {
+    return this.delegate;
   }
 
   /**
