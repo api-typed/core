@@ -30,10 +30,10 @@
     "prepack": "npm run test && npm run build",
     "test:app": "npx api-typed http-dev-fixture",
     "test:db": "docker-compose up",
-    "test:coverage": "jest --coverage",
-    "test:e2e:coverage": "jest --config jest.e2e.config.ts --coverage",
-    "test:e2e": "jest --config jest.e2e.config.ts",
-    "test": "jest"
+    "test:coverage": "jest --runInBand --coverage",
+    "test:e2e:coverage": "jest --runInBand --config jest.e2e.config.ts --coverage",
+    "test:e2e": "jest --runInBand --config jest.e2e.config.ts",
+    "test": "jest --runInBand"
   },
   "bin": {
     "api-typed": "bin/api-typed.js"
