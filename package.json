@@ -1,5 +1,5 @@
 {
-  "name": "@api-typed/framework",
+  "name": "@api-typed/core",
   "version": "0.0.3",
   "description": "Opinionated TypeScript framework built on the shoulders of giants.",
   "author": {
@@ -15,11 +15,11 @@
     "typedi",
     "framework"
   ],
-  "homepage": "https://github.com/api-typed/framework#readme",
-  "bugs": "https://github.com/api-typed/framework/issues",
+  "homepage": "https://github.com/api-typed/core#readme",
+  "bugs": "https://github.com/api-typed/core/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/api-typed/framework.git"
+    "url": "https://github.com/api-typed/core.git"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
