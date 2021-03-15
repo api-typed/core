@@ -124,7 +124,7 @@ export class TestingTool {
     return this.request('put', url, body);
   }
 
-  public delete(url: string, body: any): supertest.Test {
+  public delete(url: string, body: any = {}): supertest.Test {
     return this.request('delete', url, body);
   }
 
