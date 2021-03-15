@@ -2,7 +2,12 @@ import { kebabCase } from 'lodash';
 import * as pluralize from 'pluralize';
 import { ConfigParam } from '../../Config';
 import { ClassName } from '../../lib/ClassName';
-import { ApiResourceMetaData, ApiResourceOptions } from './types';
+import {
+  ApiResourceMetaData,
+  ApiResourceOptions,
+  Operation,
+  OperationMetaData,
+} from './types';
 
 export class ResourceRegistry {
   private readonly resources: ApiResourceMetaData[] = [];
@@ -15,7 +20,8 @@ export class ResourceRegistry {
   public register(resource: ClassName, options: ApiResourceOptions = {}): void {
     this.resources.push({
       resource,
-      path: options.path || this.createPath(resource),
+      path: options.path || this.configurePath(resource),
+      operations: this.configureOperations(options.operations),
     });
   }
 
@@ -27,7 +33,7 @@ export class ResourceRegistry {
     return this.resources.find((metadata) => metadata.resource === resource);
   }
 
-  private createPath(resource: ClassName): string {
+  private configurePath(resource: ClassName): string {
     let className = '';
     resource.toString().replace(/^class ([\w\d]+) /i, (_, resourceName) => {
       className = resourceName;
@@ -44,5 +50,33 @@ export class ResourceRegistry {
     }
 
     return `/${path}`;
+  }
+
+  private configureOperations(
+    operations: Operation[] = [
+      Operation.List,
+      Operation.Create,
+      Operation.Read,
+      Operation.Update,
+      Operation.Delete,
+    ],
+  ): Record<Operation, OperationMetaData> {
+    return {
+      [Operation.List]: {
+        enabled: operations.includes(Operation.List),
+      },
+      [Operation.Create]: {
+        enabled: operations.includes(Operation.Create),
+      },
+      [Operation.Read]: {
+        enabled: operations.includes(Operation.Read),
+      },
+      [Operation.Update]: {
+        enabled: operations.includes(Operation.Update),
+      },
+      [Operation.Delete]: {
+        enabled: operations.includes(Operation.Delete),
+      },
+    };
   }
 }

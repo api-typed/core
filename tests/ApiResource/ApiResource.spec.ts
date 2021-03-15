@@ -1,16 +1,17 @@
 import { TestingTool } from '../../src';
 import app from '../fixtureapp/app.api-typed';
+import { Ingredient } from '../fixtureapp/entities/Ingredient';
 import { Recipe } from '../fixtureapp/entities/Recipe';
 
 describe('@ApiResource', (): void => {
   const tt = new TestingTool(app);
 
   describe('Generates LCRUD endpoints for entity decorated with @ApiResource (Recipe)', (): void => {
-    test.todo('POST /recipe creates an entity');
+    test.todo('POST /recipes creates an entity');
 
-    test.todo('GET /recipe lists entities');
+    test.todo('GET /recipes lists entities');
 
-    test('GET /recipe/:id returns the entity', async (): Promise<void> => {
+    test('GET /recipes/:id returns the entity', async (): Promise<void> => {
       const repository = tt.getRepository(Recipe);
       const recipe = repository.create({
         title: 'Tiramisu',
@@ -20,7 +21,7 @@ describe('@ApiResource', (): void => {
       });
       await repository.save(recipe);
 
-      const { body } = await tt.get(`/recipe/${recipe.id}`).expect(200);
+      const { body } = await tt.get(`/recipes/${recipe.id}`).expect(200);
       console.log(body);
       expect(body).toStrictEqual({
         data: {
@@ -36,8 +37,36 @@ describe('@ApiResource', (): void => {
       });
     });
 
-    test.todo('PATCH /recipe/:id updates the entity and returns updated data');
+    test.todo('PATCH /recipes/:id updates the entity and returns updated data');
 
-    test.todo('DELETE /recipe/:id deletes the entity');
+    test.todo('DELETE /recipes/:id deletes the entity');
+  });
+
+  describe('Generates LCRUD endpoints for enabled operations with @ApiResource({ operations: []}) param (RecipeIngredient)', (): void => {
+    let ingredient: Ingredient;
+
+    beforeAll(
+      async (): Promise<void> => {
+        const repository = tt.getRepository(Ingredient);
+        ingredient = repository.create({
+          name: 'Mascarpone',
+        });
+        await repository.save(ingredient);
+      },
+    );
+
+    test.todo('GET /recipe-ingredients lists entities');
+
+    test.todo('POST /recipe-ingredients creates an entities');
+
+    test.todo('GET /recipe-ingredients/:id returns the entity');
+
+    test('PATCH /recipe-ingredients/:id returns 404', async (): Promise<void> => {
+      await tt.patch(`/recipe-ingredients/${ingredient.id}`, {}).expect(404);
+    });
+
+    test('DELETE /recipe-ingredients/:id returns 404', async (): Promise<void> => {
+      await tt.delete(`/recipe-ingredients/${ingredient.id}`).expect(404);
+    });
   });
 });

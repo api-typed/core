@@ -7,7 +7,7 @@ export class CreateIngredient1615671252503 implements MigrationInterface {
     await queryRunner.query(`
             CREATE TABLE "ingredient" (
                 "id" SERIAL NOT NULL,
-                "name" integer NOT NULL,
+                "name" character varying NOT NULL,
                 CONSTRAINT "PK_6f1e945604a0b59f56a57570e98" PRIMARY KEY ("id")
             )
         `);
