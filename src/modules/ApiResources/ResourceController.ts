@@ -7,6 +7,9 @@ import {
   Patch,
   Post,
 } from 'routing-controllers';
+import { Repository } from 'typeorm';
+import { InjectRepository } from 'typeorm-typedi-extensions';
+import { ApiResponse } from '../../Http';
 import { ApiResourceMetaData, Operation } from './types';
 
 function Conditional(active: boolean, decorator: Function): PropertyDecorator {
@@ -23,6 +26,10 @@ export class ResourceController {
 
     @JsonController(path)
     class LCRUDController<T = typeof resource> {
+      constructor(
+        @InjectRepository(resource) private readonly repository: Repository<T>,
+      ) {}
+
       @Conditional(operations[Operation.List].enabled, Get())
       public list(): T {
         throw new NotFoundError('Not implemented yet');
@@ -34,8 +41,14 @@ export class ResourceController {
       }
 
       @Conditional(operations[Operation.Read].enabled, Get('/:id'))
-      public read(@Param('id') id: number | string): T {
-        throw new NotFoundError('Not implemented yet');
+      public async read(
+        @Param('id') id: number | string,
+      ): Promise<ApiResponse<T>> {
+        const item = await this.repository.findOne(id);
+        if (!item) {
+          throw new NotFoundError();
+        }
+        return new ApiResponse<T>(item);
       }
 
       @Conditional(operations[Operation.Update].enabled, Patch('/:id'))

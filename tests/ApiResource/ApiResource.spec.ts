@@ -22,7 +22,6 @@ describe('@ApiResource', (): void => {
       await repository.save(recipe);
 
       const { body } = await tt.get(`/recipes/${recipe.id}`).expect(200);
-      console.log(body);
       expect(body).toStrictEqual({
         data: {
           id: recipe.id,
@@ -68,5 +67,13 @@ describe('@ApiResource', (): void => {
     test('DELETE /recipe-ingredients/:id returns 404', async (): Promise<void> => {
       await tt.delete(`/recipe-ingredients/${ingredient.id}`).expect(404);
     });
+  });
+
+  describe('Listing endpoint can be paginated', (): void => {
+    test.todo('Listings return pagination meta data');
+
+    test.todo('Pagination meta data includes next and previous links');
+
+    test.todo('Listings allow to go to next pages');
   });
 });
