@@ -8,6 +8,7 @@ import {
   HttpError,
   JsonController,
   NotFoundError,
+  OnUndefined,
   Param,
   Patch,
   Post,
@@ -37,7 +38,7 @@ export class ResourceController {
 
       @Conditional(operations[Operation.List].enabled, Get())
       public list(): T {
-        throw new NotFoundError('Not implemented yet');
+        throw new HttpError(501, 'Not implemented yet');
       }
 
       @Conditional(operations[Operation.Create].enabled, Post())
@@ -66,21 +67,32 @@ export class ResourceController {
       public async read(
         @Param('id') id: number | string,
       ): Promise<ApiResponse<T>> {
-        const entity = await this.repository.findOne(id);
-        if (!entity) {
-          throw new NotFoundError();
-        }
+        const entity = await this.getEntity(id);
         return new ApiResponse<T>(entity);
       }
 
       @Conditional(operations[Operation.Update].enabled, Patch('/:id'))
-      public update(@Param('id') id: number | string): T {
-        throw new NotFoundError('Not implemented yet');
+      public async update(@Param('id') id: number | string): Promise<T> {
+        await this.getEntity(id);
+        throw new HttpError(501, 'Not implemented yet');
       }
 
       @Conditional(operations[Operation.Delete].enabled, Delete('/:id'))
-      public delete(@Param('id') id: number | string): T {
-        throw new NotFoundError('Not implemented yet');
+      @OnUndefined(204)
+      public async delete(
+        @Param('id') id: number | string,
+      ): Promise<undefined> {
+        const entity = await this.getEntity(id);
+        await this.repository.delete(entity);
+        return undefined;
+      }
+
+      private async getEntity(id: number | string): Promise<T> {
+        const entity = await this.repository.findOne(id);
+        if (!entity) {
+          throw new NotFoundError();
+        }
+        return entity;
       }
     }
 

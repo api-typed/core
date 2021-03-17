@@ -1,5 +1,6 @@
 import { TestingTool } from '../../src';
 import app from '../fixtureapp/app.api-typed';
+import { Ingredient, Measure } from '../fixtureapp/entities/Ingredient';
 import { Rating } from '../fixtureapp/entities/Rating';
 import { Recipe } from '../fixtureapp/entities/Recipe';
 
@@ -7,7 +8,6 @@ describe('@ApiResource', (): void => {
   const tt = new TestingTool(app);
   let rating: Rating;
   let recipe: Recipe;
-  // let ingredient: Ingredient;
 
   beforeAll(
     async (): Promise<void> => {
@@ -17,9 +17,6 @@ describe('@ApiResource', (): void => {
         complexity: 1,
         timeRequired: 15,
       });
-      // ingredient = await tt.createEntity(Ingredient, {
-      //   name: 'Mascarpone',
-      // });
 
       rating = await tt.createEntity(Rating, {
         rating: 5,
@@ -157,7 +154,9 @@ describe('@ApiResource', (): void => {
     describe('PATCH /resources/:id', (): void => {
       test.todo('returns 404 if id param is too long');
 
-      test.todo('returns 404 is entity is not found');
+      test('returns 404 is entity is not found', async (): Promise<void> => {
+        await tt.patch('/recipes/123124', {}).expect(404);
+      });
 
       test.todo('validates the input');
 
@@ -171,9 +170,24 @@ describe('@ApiResource', (): void => {
     describe('DELETE /resources/:id', (): void => {
       test.todo('returns 404 if id param is too long');
 
-      test.todo('returns 404 if entity is not found');
+      test('returns 404 if entity is not found', async (): Promise<void> => {
+        await tt.delete('/recipes/123124').expect(404);
+      });
 
-      test.todo('deletes the entity');
+      test('deletes the entity', async (): Promise<void> => {
+        const salt = await tt.createEntity(Ingredient, {
+          name: 'Salt',
+          measure: Measure.pinch,
+        });
+        expect(salt.id).toBeDefined();
+
+        await tt.get(`/recipe-ingredients/${salt.id}`).expect(200);
+
+        await tt.delete(`/recipe-ingredients/${salt.id}`).expect(204);
+
+        const freshSalt = await tt.getRepository(Ingredient).findOne(salt.id);
+        expect(freshSalt).toBeUndefined();
+      });
 
       test('returns 404 for resources that have not enabled this operation', async (): Promise<void> => {
         await tt.delete(`/ratings/${rating.id}`).expect(404);

@@ -8,7 +8,7 @@ import {
   Min,
 } from 'class-validator';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { ApiResource, Operation } from '../../../src';
+import { ApiResource } from '../../../src';
 
 export enum Measure {
   kg = 'g',
@@ -20,7 +20,6 @@ export enum Measure {
 @Entity()
 @ApiResource({
   path: '/recipe-ingredients',
-  operations: [Operation.List, Operation.Create, Operation.Read],
 })
 export class Ingredient {
   @PrimaryGeneratedColumn()
