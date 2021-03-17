@@ -1,13 +1,18 @@
+import { validate } from 'class-validator';
 import {
+  BadRequestError,
+  Body,
   Delete,
   Get,
+  HttpCode,
+  HttpError,
   JsonController,
   NotFoundError,
   Param,
   Patch,
   Post,
 } from 'routing-controllers';
-import { Repository } from 'typeorm';
+import { DeepPartial, Repository } from 'typeorm';
 import { InjectRepository } from 'typeorm-typedi-extensions';
 import { ApiResponse } from '../../Http';
 import { ApiResourceMetaData, Operation } from './types';
@@ -36,19 +41,36 @@ export class ResourceController {
       }
 
       @Conditional(operations[Operation.Create].enabled, Post())
-      public create(): T {
-        throw new NotFoundError('Not implemented yet');
+      @HttpCode(201)
+      public async create(
+        @Body() body: DeepPartial<T>,
+      ): Promise<ApiResponse<T>> {
+        const entity = this.repository.create(body);
+
+        const validationErrors = await validate(entity as any, {
+          validationError: { target: false },
+        });
+        if (validationErrors.length > 0) {
+          const error: any = new BadRequestError(
+            `Invalid request, check 'errors' property for more info.`,
+          );
+          error.errors = validationErrors;
+          throw error;
+        }
+
+        await this.repository.save(entity);
+        return new ApiResponse<T>(entity);
       }
 
       @Conditional(operations[Operation.Read].enabled, Get('/:id'))
       public async read(
         @Param('id') id: number | string,
       ): Promise<ApiResponse<T>> {
-        const item = await this.repository.findOne(id);
-        if (!item) {
+        const entity = await this.repository.findOne(id);
+        if (!entity) {
           throw new NotFoundError();
         }
-        return new ApiResponse<T>(item);
+        return new ApiResponse<T>(entity);
       }
 
       @Conditional(operations[Operation.Update].enabled, Patch('/:id'))

@@ -1,3 +1,4 @@
+import { useContainer as useContainerForClassValidator } from 'class-validator';
 import * as findPackageJson from 'find-package-json';
 import * as path from 'path';
 import Container, { ObjectType, Token } from 'typedi';
@@ -68,6 +69,8 @@ export class App {
 
     this.logger = this.initLogger();
     Container.set(Logger, this.logger);
+
+    useContainerForClassValidator(Container);
 
     const appName = this.config.get('appName');
     const version = this.config.get('version');
