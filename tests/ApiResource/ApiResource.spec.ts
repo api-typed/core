@@ -126,7 +126,9 @@ describe('@ApiResource', (): void => {
         await tt.get('/recipes/123124').expect(404);
       });
 
-      test.todo('returns 404 if id param is too long');
+      test('returns 404 if id param is too long', async (): Promise<void> => {
+        await tt.get('/recipes/1234567891233').expect(404);
+      });
 
       test('returns the entity', async (): Promise<void> => {
         const { body } = await tt.get(`/recipes/${recipe.id}`).expect(200);
@@ -152,7 +154,11 @@ describe('@ApiResource', (): void => {
     });
 
     describe('PATCH /resources/:id', (): void => {
-      test.todo('returns 404 if id param is too long');
+      test('returns 404 if id param is too long', async (): Promise<void> => {
+        await tt
+          .patch('/recipes/1234567891233', { title: 'Misutira' })
+          .expect(404);
+      });
 
       test('returns 404 is entity is not found', async (): Promise<void> => {
         await tt.patch('/recipes/123124', {}).expect(404);
@@ -168,7 +174,9 @@ describe('@ApiResource', (): void => {
     });
 
     describe('DELETE /resources/:id', (): void => {
-      test.todo('returns 404 if id param is too long');
+      test('returns 404 if id param is too long', async (): Promise<void> => {
+        await tt.delete('/recipes/1234567891233').expect(404);
+      });
 
       test('returns 404 if entity is not found', async (): Promise<void> => {
         await tt.delete('/recipes/123124').expect(404);

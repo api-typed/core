@@ -88,10 +88,17 @@ export class ResourceController {
       }
 
       private async getEntity(id: number | string): Promise<T> {
-        const entity = await this.repository.findOne(id);
+        let entity: T | undefined;
+        try {
+          entity = await this.repository.findOne(id);
+        } catch {
+          // noop
+        }
+
         if (!entity) {
           throw new NotFoundError();
         }
+
         return entity;
       }
     }
