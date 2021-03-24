@@ -72,9 +72,30 @@ export class ResourceController {
       }
 
       @Conditional(operations[Operation.Update].enabled, Patch('/:id'))
-      public async update(@Param('id') id: number | string): Promise<T> {
-        await this.getEntity(id);
-        throw new HttpError(501, 'Not implemented yet');
+      public async update(
+        @Param('id') id: number | string,
+        @Body() body: DeepPartial<T>,
+      ): Promise<ApiResponse<T>> {
+        const entity = await this.getEntity(id);
+        const data = this.repository.create(body);
+
+        const validationErrors = await validate(data as any, {
+          forbidNonWhitelisted: true,
+          skipUndefinedProperties: true,
+          validationError: { target: false },
+        });
+        if (validationErrors.length > 0) {
+          const error: any = new BadRequestError(
+            `Invalid request, check 'errors' property for more info.`,
+          );
+          error.errors = validationErrors;
+          throw error;
+        }
+
+        await this.repository.save(this.repository.merge(entity, body));
+
+        const freshEntity = await this.getEntity(id);
+        return new ApiResponse<T>(freshEntity);
       }
 
       @Conditional(operations[Operation.Delete].enabled, Delete('/:id'))

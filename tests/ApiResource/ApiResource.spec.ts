@@ -8,6 +8,7 @@ describe('@ApiResource', (): void => {
   const tt = new TestingTool(app);
   let rating: Rating;
   let recipe: Recipe;
+  let ingredient: Ingredient;
 
   beforeAll(
     async (): Promise<void> => {
@@ -16,6 +17,12 @@ describe('@ApiResource', (): void => {
         description: 'Most delicious cake.',
         complexity: 1,
         timeRequired: 15,
+      });
+      ingredient = await tt.createEntity(Ingredient, {
+        name: 'Amaretto',
+        measure: Measure.l,
+        minMeasure: 0,
+        maxMeasure: 1,
       });
 
       rating = await tt.createEntity(Rating, {
@@ -102,6 +109,20 @@ describe('@ApiResource', (): void => {
             meta: {},
           });
         });
+
+        test('ignores id in the body', async (): Promise<void> => {
+          const { body } = await tt
+            .post('/recipe-ingredients', {
+              id: 567,
+              name: 'Mascarpone Cheese',
+              measure: 'g',
+              minMeasure: 0,
+              maxMeasure: 50,
+            })
+            .expect(201);
+
+          expect(body.data.id).not.toEqual(567);
+        });
       });
 
       test('returns 404 for resources that have not enabled this operation', async (): Promise<void> => {
@@ -164,9 +185,53 @@ describe('@ApiResource', (): void => {
         await tt.patch('/recipes/123124', {}).expect(404);
       });
 
-      test.todo('validates the input');
+      describe('validates the input', (): void => {
+        test('checks constraints', async (): Promise<void> => {
+          const { body } = await tt
+            .patch(`/recipe-ingredients/${ingredient.id}`, {
+              name: '',
+              measure: 'box',
+              minMeasure: 0,
+              maxMeasure: 'plenty',
+            })
+            .expect(400);
 
-      test.todo('updates the entity and returns updated data');
+          expect(body.errors).toBeDefined();
+          expect(body.errors).toBeInstanceOf(Array);
+          expect(body.errors.length).toBeGreaterThan(0);
+        });
+      });
+
+      test('updates the entity and returns updated data', async (): Promise<void> => {
+        const { body } = await tt
+          .patch(`/recipe-ingredients/${ingredient.id}`, {
+            name: 'Amaretto Liqueor',
+            measure: 'l',
+            minMeasure: 0,
+            maxMeasure: 10,
+          })
+          .expect(200);
+
+        expect(body).toStrictEqual({
+          data: {
+            id: ingredient.id,
+            name: 'Amaretto Liqueor',
+            measure: 'l',
+            minMeasure: '0.00',
+            maxMeasure: '10.00',
+          },
+          meta: {},
+        });
+      });
+
+      test('does not allow to change id', async (): Promise<void> => {
+        const { body } = await tt
+          .patch(`/recipe-ingredients/${ingredient.id}`, {
+            id: 10,
+          })
+          .expect(200);
+        expect(body.data.id).toEqual(ingredient.id);
+      });
 
       test('returns 404 for resources that have not enabled this operation', async (): Promise<void> => {
         await tt.patch(`/ratings/${rating.id}`, { rating: 4 }).expect(404);
