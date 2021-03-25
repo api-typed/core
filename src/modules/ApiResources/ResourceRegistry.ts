@@ -53,29 +53,23 @@ export class ResourceRegistry {
   }
 
   private configureOperations(
-    operations: Operation[] = [
-      Operation.List,
-      Operation.Create,
-      Operation.Read,
-      Operation.Update,
-      Operation.Delete,
-    ],
+    operations: Operation[] = ['list', 'create', 'read', 'update', 'delete'],
   ): Record<Operation, OperationMetaData> {
     return {
-      [Operation.List]: {
-        enabled: operations.includes(Operation.List),
+      list: {
+        enabled: operations.includes('list'),
       },
-      [Operation.Create]: {
-        enabled: operations.includes(Operation.Create),
+      create: {
+        enabled: operations.includes('create'),
       },
-      [Operation.Read]: {
-        enabled: operations.includes(Operation.Read),
+      read: {
+        enabled: operations.includes('read'),
       },
-      [Operation.Update]: {
-        enabled: operations.includes(Operation.Update),
+      update: {
+        enabled: operations.includes('update'),
       },
-      [Operation.Delete]: {
-        enabled: operations.includes(Operation.Delete),
+      delete: {
+        enabled: operations.includes('delete'),
       },
     };
   }

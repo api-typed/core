@@ -1,12 +1,6 @@
 import { ClassName } from '../../lib/ClassName';
 
-export enum Operation {
-  List = 'list',
-  Create = 'create',
-  Read = 'read',
-  Update = 'update',
-  Delete = 'delete',
-}
+export type Operation = 'list' | 'create' | 'read' | 'update' | 'delete';
 
 export interface OperationMetaData {
   enabled: boolean;

@@ -17,7 +17,7 @@ import { DeepPartial, Repository } from 'typeorm';
 import { InjectRepository } from 'typeorm-typedi-extensions';
 import { ApiResponse } from '../../Http';
 import { Paginator } from './Paginator';
-import { ApiResourceMetaData, Operation } from './types';
+import { ApiResourceMetaData } from './types';
 
 function Conditional(active: boolean, decorator: Function): PropertyDecorator {
   return (target, propertyKey) => {
@@ -37,7 +37,7 @@ export class ResourceController {
         @InjectRepository(resource) private readonly repository: Repository<T>,
       ) {}
 
-      @Conditional(operations[Operation.List].enabled, Get())
+      @Conditional(operations.list.enabled, Get())
       public async list(@QueryParam('page') page = 1): Promise<ApiResponse<T>> {
         if (page < 1) {
           throw new BadRequestError('Page number must be positive.');
@@ -61,7 +61,7 @@ export class ResourceController {
         });
       }
 
-      @Conditional(operations[Operation.Create].enabled, Post())
+      @Conditional(operations.create.enabled, Post())
       @HttpCode(201)
       public async create(
         @Body() body: DeepPartial<T>,
@@ -83,7 +83,7 @@ export class ResourceController {
         return new ApiResponse<T>(entity);
       }
 
-      @Conditional(operations[Operation.Read].enabled, Get('/:id'))
+      @Conditional(operations.read.enabled, Get('/:id'))
       public async read(
         @Param('id') id: number | string,
       ): Promise<ApiResponse<T>> {
@@ -91,7 +91,7 @@ export class ResourceController {
         return new ApiResponse<T>(entity);
       }
 
-      @Conditional(operations[Operation.Update].enabled, Patch('/:id'))
+      @Conditional(operations.update.enabled, Patch('/:id'))
       public async update(
         @Param('id') id: number | string,
         @Body() body: DeepPartial<T>,
@@ -118,7 +118,7 @@ export class ResourceController {
         return new ApiResponse<T>(freshEntity);
       }
 
-      @Conditional(operations[Operation.Delete].enabled, Delete('/:id'))
+      @Conditional(operations.delete.enabled, Delete('/:id'))
       @OnUndefined(204)
       public async delete(
         @Param('id') id: number | string,
