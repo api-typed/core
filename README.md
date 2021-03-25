@@ -19,6 +19,12 @@ Api-Typed combines several popular librariers into one framework removing the ov
 
 Api-Typed ties these powerful tools together and exposes a convenient pluggable modules design with easy configuration.
 
+# Features
+
+- `@ApiResource()` annotation on entities that automatically registers an LCRUD controller. [See docs](./docs/ApiResource.md)
+
 # Documentation
 
 TBD.
+
+See `./docs` dir for now.
