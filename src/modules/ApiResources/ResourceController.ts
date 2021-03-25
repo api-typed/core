@@ -5,17 +5,18 @@ import {
   Delete,
   Get,
   HttpCode,
-  HttpError,
   JsonController,
   NotFoundError,
   OnUndefined,
   Param,
   Patch,
   Post,
+  QueryParam,
 } from 'routing-controllers';
 import { DeepPartial, Repository } from 'typeorm';
 import { InjectRepository } from 'typeorm-typedi-extensions';
 import { ApiResponse } from '../../Http';
+import { Paginator } from './Paginator';
 import { ApiResourceMetaData, Operation } from './types';
 
 function Conditional(active: boolean, decorator: Function): PropertyDecorator {
@@ -37,8 +38,27 @@ export class ResourceController {
       ) {}
 
       @Conditional(operations[Operation.List].enabled, Get())
-      public list(): T {
-        throw new HttpError(501, 'Not implemented yet');
+      public async list(@QueryParam('page') page = 1): Promise<ApiResponse<T>> {
+        if (page < 1) {
+          throw new BadRequestError('Page number must be positive.');
+        }
+
+        const paginator = new Paginator<T>(this.repository);
+        const { items, info: pagination } = await paginator.getPage(page, {
+          id: 'ASC',
+        } as any);
+        const { totalPages } = pagination;
+
+        return new ApiResponse<T>(items, {
+          pagination,
+          links: {
+            first: path,
+            last: `${path}${totalPages > 1 ? `?page=${totalPages}` : ''}`,
+            next: page < totalPages ? `${path}?page=${page + 1}` : null,
+            prev: page > 1 ? `${path}?page=${page - 1}` : null,
+            self: page === 1 ? path : `${path}?page=${page}`,
+          },
+        });
       }
 
       @Conditional(operations[Operation.Create].enabled, Post())

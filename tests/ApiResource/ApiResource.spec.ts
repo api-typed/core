@@ -1,3 +1,4 @@
+import { range } from 'lodash';
 import { TestingTool } from '../../src';
 import app from '../fixtureapp/app.api-typed';
 import { Ingredient, Measure } from '../fixtureapp/entities/Ingredient';
@@ -131,11 +132,97 @@ describe('@ApiResource', (): void => {
     });
 
     describe('GET /resources', (): void => {
-      test.todo('lists entities');
+      beforeAll(
+        async (): Promise<void> => {
+          await Promise.all([
+            range(1, 69).map((n) =>
+              tt.createEntity(Recipe, {
+                title: `Recipe ${n}`,
+                description: `Description ${n}`,
+                complexity: n,
+                timeRequired: n * 60 * 10,
+              }),
+            ),
+          ]);
+        },
+      );
+      test('lists entities', async (): Promise<void> => {
+        const { body } = await tt.get('/recipes').expect(200);
 
-      test.todo('returns pagination meta data');
+        expect(body).toHaveProperty('data');
+        expect(body.data).toBeInstanceOf(Array);
+        expect(body.data).toHaveLength(20);
+        expect(body.data.map((item) => item.id)).toStrictEqual(range(1, 21));
+      });
 
-      test.todo('listings allow to go to next pages');
+      test('returns pagination meta data', async (): Promise<void> => {
+        const { body } = await tt.get('/recipes').expect(200);
+
+        expect(body).toHaveProperty('meta');
+        expect(body.meta).toStrictEqual({
+          links: {
+            first: '/recipes',
+            last: '/recipes?page=4',
+            next: '/recipes?page=2',
+            prev: null,
+            self: '/recipes',
+          },
+          pagination: {
+            count: 20,
+            page: 1,
+            perPage: 20,
+            total: 69,
+            totalPages: 4,
+          },
+        });
+      });
+
+      const makeMeta = (
+        page: number,
+        prevPage?: number,
+        nextPage?: number,
+      ) => ({
+        links: {
+          first: '/recipes',
+          last: '/recipes?page=4',
+          next: nextPage ? `/recipes?page=${nextPage}` : null,
+          prev: prevPage ? `/recipes?page=${prevPage}` : null,
+          self: `/recipes?page=${page}`,
+        },
+        pagination: {
+          count: 20,
+          page,
+          perPage: 20,
+          total: 69,
+          totalPages: 4,
+        },
+      });
+
+      const pages = [
+        [2, makeMeta(2, 1, 3), range(21, 41)],
+        [3, makeMeta(3, 2, 4), range(41, 61)],
+        [
+          4,
+          {
+            links: makeMeta(4, 3).links,
+            pagination: { ...makeMeta(4, 3).pagination, count: 9 },
+          },
+          range(61, 70),
+        ],
+      ];
+
+      test.each(pages)(
+        'listings allow to go page %s',
+        async (page, meta, ids): Promise<void> => {
+          const { body } = await tt.get(`/recipes?page=${page}`).expect(200);
+          expect(body.data.map((item) => item.id)).toStrictEqual(ids);
+          expect(body.meta).toStrictEqual(meta);
+        },
+      );
+
+      test.todo('allows setting how many items per page are returned');
+
+      test.todo('allows defining default sort order');
 
       test('returns 404 for resources that have not enabled this operation', async (): Promise<void> => {
         await tt.get('/ratings').expect(404);
