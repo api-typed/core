@@ -6,13 +6,15 @@ import {
   StandardProjectModule,
   TypeORMModule,
 } from '../..';
+import { ApiResourcesModule } from '../ApiResources/ApiResourcesModule';
 
 export class StandardProjectApp extends App {
   constructor(rootDir: string, modules: ModuleInterface[] = []) {
     super(rootDir, [
-      new HttpModule(),
-      new CommandLineModule(),
       new TypeORMModule(),
+      new HttpModule(),
+      new ApiResourcesModule(),
+      new CommandLineModule(),
       new StandardProjectModule(),
       ...modules,
     ]);

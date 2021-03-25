@@ -43,16 +43,45 @@ export class HttpModule
 
     useContainer(Container);
 
+    if (app.getRunMode() === AppRunMode.HTTP) {
+      return this;
+    }
+  }
+
+  public async start(): Promise<Express.Application> {
     this.expressApp = createExpressServer({
-      controllers: app.loadFromModules<HasControllers, Function>(
+      controllers: this.app.loadFromModules<HasControllers, Function>(
         'loadControllers',
       ),
-      middlewares: app.loadFromModules<HasMiddlewares, Function>(
+      middlewares: this.app.loadFromModules<HasMiddlewares, Function>(
         'loadMiddlewares',
       ),
     });
     Container.set(HttpServices.ExpressApp, this.expressApp);
 
+    this.logRoutes();
+
+    if (!this.app.config.get('isTest')) {
+      await new Promise((resolve) => {
+        const port = this.app.config.get<number>('http.port');
+        this.server = this.expressApp.listen(port, () => {
+          this.app.logger.info(`HTTP server listening on port :${port}`);
+          resolve(this.server);
+        });
+        Container.set(HttpServices.ExpressServer, this.server);
+      });
+    }
+
+    return this.expressApp;
+  }
+
+  public async stop(): Promise<void> {
+    if (this.server) {
+      this.server.close();
+    }
+  }
+
+  private logRoutes(): void {
     const routes: string[] = this.expressApp._router.stack.reduce(
       (routes, middleware) => {
         if (!middleware.route) {
@@ -67,27 +96,6 @@ export class HttpModule
       [],
     );
 
-    app.logger.debug('Loaded HTTP routes', { data: routes });
-
-    if (app.getRunMode() === AppRunMode.HTTP) {
-      return this;
-    }
-  }
-
-  public async start(): Promise<Express.Application> {
-    await new Promise((resolve) => {
-      const port = this.app.config.get<number>('http.port');
-      this.server = this.expressApp.listen(port, () => {
-        this.app.logger.info(`HTTP server listening on port :${port}`);
-        resolve(this.server);
-      });
-      Container.set(HttpServices.ExpressServer, this.server);
-    });
-
-    return this.expressApp;
-  }
-
-  public async stop(): Promise<void> {
-    this.server.close();
+    this.app.logger.debug('Loaded HTTP routes', { data: routes });
   }
 }

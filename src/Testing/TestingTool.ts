@@ -1,5 +1,5 @@
 import * as supertest from 'supertest';
-import { Connection, EntityTarget, Repository } from 'typeorm';
+import { Connection, DeepPartial, EntityTarget, Repository } from 'typeorm';
 import { App, AppRunMode } from '../App';
 
 interface TestingToolOptions {
@@ -83,10 +83,18 @@ export class TestingTool {
     await this.app.stop();
   }
 
-  public getRepository<Entity>(
-    target: EntityTarget<Entity>,
-  ): Repository<Entity> {
+  public getRepository<T>(target: EntityTarget<T>): Repository<T> {
     return this.app.get(Connection).getRepository(target);
+  }
+
+  public async createEntity<T>(
+    target: EntityTarget<T>,
+    data: DeepPartial<T>,
+  ): Promise<T> {
+    const repository = this.getRepository(target);
+    const entity = repository.create(data);
+    await repository.save(entity);
+    return entity;
   }
 
   public request(
@@ -124,7 +132,7 @@ export class TestingTool {
     return this.request('put', url, body);
   }
 
-  public delete(url: string, body: any): supertest.Test {
+  public delete(url: string, body: any = {}): supertest.Test {
     return this.request('delete', url, body);
   }
 
