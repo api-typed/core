@@ -9,10 +9,12 @@ export interface OperationMetaData {
 export interface ApiResourceOptions {
   path?: string;
   operations?: Operation[];
+  perPage?: number;
 }
 
 export interface ApiResourceMetaData {
   resource: ClassName;
   path: string;
   operations: Record<Operation, OperationMetaData>;
+  perPage: number;
 }

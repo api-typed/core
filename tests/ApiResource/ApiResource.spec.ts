@@ -134,7 +134,7 @@ describe('@ApiResource', (): void => {
     describe('GET /resources', (): void => {
       beforeAll(
         async (): Promise<void> => {
-          await Promise.all([
+          await Promise.all(
             range(1, 69).map((n) =>
               tt.createEntity(Recipe, {
                 title: `Recipe ${n}`,
@@ -143,9 +143,18 @@ describe('@ApiResource', (): void => {
                 timeRequired: n * 60 * 10,
               }),
             ),
-          ]);
+          );
+          await Promise.all(
+            range(1, 10).map((n) =>
+              tt.createEntity(Ingredient, {
+                name: `Ingredient ${n}`,
+                measure: Measure.kg,
+              }),
+            ),
+          );
         },
       );
+
       test('lists entities', async (): Promise<void> => {
         const { body } = await tt.get('/recipes').expect(200);
 
@@ -220,7 +229,26 @@ describe('@ApiResource', (): void => {
         },
       );
 
-      test.todo('allows setting how many items per page are returned');
+      test('allows setting how many items per page are returned', async (): Promise<void> => {
+        const { body } = await tt.get('/recipe-ingredients').expect(200);
+        expect(body.data).toHaveLength(4);
+        expect(body.meta).toStrictEqual({
+          links: {
+            first: '/recipe-ingredients',
+            last: '/recipe-ingredients?page=3',
+            next: '/recipe-ingredients?page=2',
+            prev: null,
+            self: '/recipe-ingredients',
+          },
+          pagination: {
+            count: 4,
+            page: 1,
+            perPage: 4,
+            total: 10,
+            totalPages: 3,
+          },
+        });
+      });
 
       test.todo('allows defining default sort order');
 

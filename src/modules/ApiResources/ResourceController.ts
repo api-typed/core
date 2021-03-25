@@ -29,7 +29,7 @@ function Conditional(active: boolean, decorator: Function): PropertyDecorator {
 
 export class ResourceController {
   public static create(metadata: ApiResourceMetaData): Function {
-    const { path, resource, operations } = metadata;
+    const { path, resource, operations, perPage } = metadata;
 
     @JsonController(path)
     class LCRUDController<T = typeof resource> {
@@ -43,7 +43,7 @@ export class ResourceController {
           throw new BadRequestError('Page number must be positive.');
         }
 
-        const paginator = new Paginator<T>(this.repository);
+        const paginator = new Paginator<T>(this.repository, { perPage });
         const { items, info: pagination } = await paginator.getPage(page, {
           id: 'ASC',
         } as any);

@@ -20,6 +20,7 @@ export enum Measure {
 @Entity()
 @ApiResource({
   path: '/recipe-ingredients',
+  perPage: 4,
 })
 export class Ingredient {
   @PrimaryGeneratedColumn()

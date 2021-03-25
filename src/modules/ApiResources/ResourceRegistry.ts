@@ -22,6 +22,7 @@ export class ResourceRegistry {
       resource,
       path: options.path || this.configurePath(resource),
       operations: this.configureOperations(options.operations),
+      perPage: options.perPage || 20,
     });
   }
 
