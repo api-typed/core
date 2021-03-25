@@ -10,6 +10,7 @@ export interface ApiResourceOptions {
   path?: string;
   operations?: Operation[];
   perPage?: number;
+  sortDefault?: Record<string, 'ASC' | 'DESC'>;
 }
 
 export interface ApiResourceMetaData {
@@ -17,4 +18,5 @@ export interface ApiResourceMetaData {
   path: string;
   operations: Record<Operation, OperationMetaData>;
   perPage: number;
+  sortDefault?: Record<string, 'ASC' | 'DESC'>;
 }

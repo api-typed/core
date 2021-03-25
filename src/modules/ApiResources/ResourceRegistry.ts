@@ -23,6 +23,7 @@ export class ResourceRegistry {
       path: options.path || this.configurePath(resource),
       operations: this.configureOperations(options.operations),
       perPage: options.perPage || 20,
+      sortDefault: options.sortDefault,
     });
   }
 

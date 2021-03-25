@@ -1,16 +1,17 @@
 import { FindManyOptions, Repository } from 'typeorm';
 import { PaginationInfo } from './types';
 
-export interface PaginatorOptions {
+export interface PaginatorOptions<T> {
   perPage: number;
+  sortBy?: FindManyOptions<T>['order'];
 }
 
 export class Paginator<T = unknown> {
-  private readonly options: PaginatorOptions;
+  private readonly options: PaginatorOptions<T>;
 
   constructor(
     private readonly repository: Repository<T>,
-    options: Partial<PaginatorOptions> = {},
+    options: Partial<PaginatorOptions<T>> = {},
   ) {
     this.options = {
       perPage: 20,
@@ -20,7 +21,6 @@ export class Paginator<T = unknown> {
 
   public async getPage(
     page = 1,
-    order: FindManyOptions<T>['order'] = {},
   ): Promise<{ items: T[]; info: PaginationInfo }> {
     if (page < 1) {
       throw new Error('Page number must be positive.');
@@ -29,7 +29,7 @@ export class Paginator<T = unknown> {
     const { perPage } = this.options;
 
     const [items, total] = await this.repository.findAndCount({
-      order,
+      order: this.options.sortBy,
       take: perPage,
       skip: (page - 1) * perPage,
     });

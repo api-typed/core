@@ -3,7 +3,11 @@ import { ApiResource } from '../../../src';
 import { BaseEntity } from './BaseEntity';
 
 @Entity()
-@ApiResource()
+@ApiResource({
+  sortDefault: {
+    id: 'ASC',
+  },
+})
 export class Recipe extends BaseEntity {
   @Column()
   public title: string;

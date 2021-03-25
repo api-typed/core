@@ -10,6 +10,7 @@ describe('@ApiResource', (): void => {
   let rating: Rating;
   let recipe: Recipe;
   let ingredient: Ingredient;
+  let ingredientsCount = 0;
 
   beforeAll(
     async (): Promise<void> => {
@@ -72,6 +73,8 @@ describe('@ApiResource', (): void => {
             })
             .expect(201);
 
+          ingredientsCount += 1;
+
           expect(body).toStrictEqual({
             data: {
               // '@id': expect.any(Number),
@@ -96,6 +99,8 @@ describe('@ApiResource', (): void => {
               description: 'Sweet and creamy it is the basis of any good cake!',
             })
             .expect(201);
+
+          ingredientsCount += 1;
 
           expect(body).toStrictEqual({
             data: {
@@ -122,6 +127,8 @@ describe('@ApiResource', (): void => {
             })
             .expect(201);
 
+          ingredientsCount += 1;
+
           expect(body.data.id).not.toEqual(567);
         });
       });
@@ -145,7 +152,7 @@ describe('@ApiResource', (): void => {
             ),
           );
           await Promise.all(
-            range(1, 10).map((n) =>
+            range(1, 10 - ingredientsCount).map((n) =>
               tt.createEntity(Ingredient, {
                 name: `Ingredient ${n}`,
                 measure: Measure.kg,
@@ -249,8 +256,6 @@ describe('@ApiResource', (): void => {
           },
         });
       });
-
-      test.todo('allows defining default sort order');
 
       test('returns 404 for resources that have not enabled this operation', async (): Promise<void> => {
         await tt.get('/ratings').expect(404);

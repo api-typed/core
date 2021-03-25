@@ -13,7 +13,7 @@ import {
   Post,
   QueryParam,
 } from 'routing-controllers';
-import { DeepPartial, Repository } from 'typeorm';
+import { DeepPartial, EntityMetadata, Repository } from 'typeorm';
 import { InjectRepository } from 'typeorm-typedi-extensions';
 import { ApiResponse } from '../../Http';
 import { Paginator } from './Paginator';
@@ -29,13 +29,17 @@ function Conditional(active: boolean, decorator: Function): PropertyDecorator {
 
 export class ResourceController {
   public static create(metadata: ApiResourceMetaData): Function {
-    const { path, resource, operations, perPage } = metadata;
+    const { path, resource, operations, perPage, sortDefault } = metadata;
 
     @JsonController(path)
     class LCRUDController<T = typeof resource> {
+      private readonly metadata: EntityMetadata;
+
       constructor(
         @InjectRepository(resource) private readonly repository: Repository<T>,
-      ) {}
+      ) {
+        this.metadata = this.repository.metadata;
+      }
 
       @Conditional(operations.list.enabled, Get())
       public async list(@QueryParam('page') page = 1): Promise<ApiResponse<T>> {
@@ -43,10 +47,11 @@ export class ResourceController {
           throw new BadRequestError('Page number must be positive.');
         }
 
-        const paginator = new Paginator<T>(this.repository, { perPage });
-        const { items, info: pagination } = await paginator.getPage(page, {
-          id: 'ASC',
-        } as any);
+        const paginator = new Paginator<T>(this.repository, {
+          perPage,
+          sortBy: this.getSortOrder() as any,
+        });
+        const { items, info: pagination } = await paginator.getPage(page);
         const { totalPages } = pagination;
 
         return new ApiResponse<T>(items, {
@@ -141,6 +146,26 @@ export class ResourceController {
         }
 
         return entity;
+      }
+
+      private getSortOrder(): Record<string, 'ASC' | 'DESC'> {
+        if (sortDefault) {
+          return sortDefault;
+        }
+
+        const order = {};
+
+        if (this.metadata.createDateColumn) {
+          order[this.metadata.createDateColumn.propertyName] = 'ASC';
+        } else if (this.metadata.updateDateColumn) {
+          order[this.metadata.updateDateColumn.propertyName] = 'ASC';
+        } else {
+          this.metadata.primaryColumns.forEach((column) => {
+            order[column.propertyName] = 'ASC';
+          });
+        }
+
+        return order;
       }
     }
 

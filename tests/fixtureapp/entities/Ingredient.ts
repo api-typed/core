@@ -21,6 +21,9 @@ export enum Measure {
 @ApiResource({
   path: '/recipe-ingredients',
   perPage: 4,
+  sortDefault: {
+    id: 'ASC',
+  },
 })
 export class Ingredient {
   @PrimaryGeneratedColumn()
