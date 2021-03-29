@@ -1,11 +1,17 @@
 import {
+  BadRequestError,
   Body,
   Delete,
+  ForbiddenError,
   Get,
+  HttpError,
+  InternalServerError,
   JsonController,
+  Param,
   Patch,
   Post,
   Put,
+  UnauthorizedError,
 } from 'routing-controllers';
 
 @JsonController('/test')
@@ -16,6 +22,23 @@ export class TestController {
       method: 'GET',
       body: null,
     };
+  }
+
+  @Get('/error/:code')
+  public getError(@Param('code') code: number): void {
+    const message = 'Custom test message';
+    switch (code) {
+      case 400:
+        throw new BadRequestError(message);
+      case 401:
+        throw new UnauthorizedError(message);
+      case 403:
+        throw new ForbiddenError(message);
+      case 500:
+        throw new InternalServerError(message);
+      default:
+        throw new HttpError(code, message);
+    }
   }
 
   @Post()
