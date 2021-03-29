@@ -50,6 +50,7 @@ export class HttpModule
 
   public async start(): Promise<Express.Application> {
     this.expressApp = createExpressServer({
+      defaultErrorHandler: false,
       controllers: this.app.loadFromModules<HasControllers, Function>(
         'loadControllers',
       ),

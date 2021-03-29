@@ -1,31 +1,21 @@
-import express from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { ExpressMiddlewareInterface, Middleware } from 'routing-controllers';
 import { ConfigParam } from '../../Config';
 import { InjectLogger, LoggerInterface, LogLevel } from '../../Logger';
 
 @Middleware({ type: 'before' })
 export class RequestLogger implements ExpressMiddlewareInterface {
-  private readonly level;
-
-  private readonly logger;
-
   constructor(
-    @InjectLogger() logger: LoggerInterface,
-    @ConfigParam('http.log_level') level: LogLevel = LogLevel.debug,
-  ) {
-    this.logger = logger;
-    this.level = level;
-  }
+    @InjectLogger() private readonly logger: LoggerInterface,
+    @ConfigParam('http.log_level')
+    private readonly level: LogLevel = LogLevel.debug,
+  ) {}
 
-  public use(
-    request: express.Request,
-    response: express.Response,
-    next: express.NextFunction,
-  ) {
+  public use(request: Request, response: Response, next: NextFunction) {
     const startedAt = process.hrtime();
     const oldEnd = response.end;
 
-    response.end = (...restArgs: any[]): void => {
+    response.end = (...restArgs: unknown[]): void => {
       const timeDiff = process.hrtime(startedAt);
 
       const meta = {
