@@ -1,4 +1,4 @@
-import { Config } from '../Config';
+import { Config } from '@api-typed/config';
 import { App } from './App';
 
 export enum AppRunMode {

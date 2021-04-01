@@ -1,6 +1,6 @@
+import { ConfigParam } from '@api-typed/config';
 import * as path from 'path';
 import { Service } from 'typedi';
-import { ConfigParam } from '../Config';
 import { deleteFile, readFile, writeFile } from '../lib/file';
 
 @Service()

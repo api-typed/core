@@ -1,8 +1,8 @@
+import { ConfigParam } from '@api-typed/config';
 import { exec, spawn } from 'child_process';
 import * as glob from 'glob';
 import * as path from 'path';
 import { Inject, Service } from 'typedi';
-import { ConfigParam } from '../../../../Config';
 import { InjectLogger, LoggerInterface } from '../../../../Logger';
 import { ConfigDumper } from './ConfigDumper';
 

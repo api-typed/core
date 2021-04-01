@@ -1,8 +1,8 @@
+import { Config } from '@api-typed/config';
 import Container from 'typedi';
 import { Connection, createConnection, useContainer } from 'typeorm';
 import { AbstractModule, App } from '../../App';
 import { HasCommands } from '../../CommandLine';
-import { Config } from '../../Config';
 import { Migrate } from './commands/Migrate';
 import { Migration } from './commands/Migration';
 import { Revert } from './commands/Revert';
@@ -28,7 +28,7 @@ export class TypeORMModule extends AbstractModule implements HasCommands {
   }
 
   public async init(app: App): Promise<void> {
-    const options = app.config.getRequired('typeorm.connection', [
+    const options = app.config.getRequired<any>('typeorm.connection', [
       'type',
       'hostname',
       'port',

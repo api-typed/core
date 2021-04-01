@@ -1,10 +1,10 @@
+import { Config } from '@api-typed/config';
 import * as Express from 'express';
 import { Server } from 'net';
 import { createExpressServer, useContainer } from 'routing-controllers';
 import Container, { Token } from 'typedi';
 import { App, AppDelegate, AppRunMode } from '../App';
 import { AbstractModule } from '../App/AbstractModule';
-import { Config } from '../Config';
 import { loadMiddlewares } from '../lib/loadMiddlewares';
 import { HasControllers, HasMiddlewares } from './types';
 

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { Config } from '../Config';
+import { Config } from '@api-typed/config';
 import { App } from './App';
 import { ModuleInterface } from './types';
 

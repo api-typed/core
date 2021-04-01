@@ -1,8 +1,8 @@
+import { Config } from '@api-typed/config';
 import { useContainer as useContainerForClassValidator } from 'class-validator';
 import * as findPackageJson from 'find-package-json';
 import * as path from 'path';
 import Container, { ObjectType, Token } from 'typedi';
-import { Config } from '../Config';
 import { loadEnvFiles } from '../lib/loadEnvFiles';
 import { LogFormat, Logger, LoggerInterface, LogLevel } from '../Logger';
 import { AppDelegate, AppRunMode, ModuleInterface } from './types';
@@ -87,7 +87,7 @@ export class App {
    * Initializes application configuration.
    */
   private initConfig(initial: Record<string, any> = {}): Config {
-    const config = new Config();
+    const config = Config.defaultInstance;
 
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const packageJson = require(path.join(initial.projectDir, 'package.json'));

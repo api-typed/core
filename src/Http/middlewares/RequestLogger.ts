@@ -1,6 +1,6 @@
+import { ConfigParam } from '@api-typed/config';
 import { NextFunction, Request, Response } from 'express';
 import { ExpressMiddlewareInterface, Middleware } from 'routing-controllers';
-import { ConfigParam } from '../../Config';
 import { InjectLogger, LoggerInterface, LogLevel } from '../../Logger';
 
 @Middleware({ type: 'before' })

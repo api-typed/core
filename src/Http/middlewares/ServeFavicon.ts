@@ -1,7 +1,7 @@
+import { ConfigParam } from '@api-typed/config';
 import express from 'express';
 import { ExpressMiddlewareInterface, Middleware } from 'routing-controllers';
 import * as favicon from 'serve-favicon';
-import { ConfigParam } from '../../Config';
 
 @Middleware({ type: 'before', priority: 10 })
 export class ServeFavicon implements ExpressMiddlewareInterface {

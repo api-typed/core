@@ -1,6 +1,6 @@
+import { ConfigParam } from '@api-typed/config';
 import { kebabCase } from 'lodash';
 import * as pluralize from 'pluralize';
-import { ConfigParam } from '../../Config';
 import { ClassName } from '../../lib/ClassName';
 import {
   ApiResourceMetaData,

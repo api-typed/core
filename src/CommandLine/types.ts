@@ -1,4 +1,4 @@
-import { Config } from '../Config';
+import { Config } from '@api-typed/config';
 
 export interface CommandInterface {
   run(...args: any[]): Promise<number | void>;
