@@ -1,5 +1,5 @@
+import { ClassName } from '@api-typed/common';
 import { Service } from 'typedi';
-import { ClassName } from '../lib/ClassName';
 
 type EventHandler<T> = (event: T) => Promise<void> | void;
 

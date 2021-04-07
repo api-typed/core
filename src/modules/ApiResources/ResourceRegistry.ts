@@ -1,7 +1,7 @@
+import { ClassName } from '@api-typed/common';
 import { ConfigParam } from '@api-typed/config';
 import { kebabCase } from 'lodash';
 import * as pluralize from 'pluralize';
-import { ClassName } from '../../lib/ClassName';
 import {
   ApiResourceMetaData,
   ApiResourceOptions,

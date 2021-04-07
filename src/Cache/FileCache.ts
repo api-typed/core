@@ -1,7 +1,7 @@
+import { deleteFile, readFile, writeFile } from '@api-typed/common';
 import { ConfigParam } from '@api-typed/config';
 import * as path from 'path';
 import { Service } from 'typedi';
-import { deleteFile, readFile, writeFile } from '../lib/file';
 
 @Service()
 export class FileCache {

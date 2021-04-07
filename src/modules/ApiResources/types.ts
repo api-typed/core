@@ -1,4 +1,4 @@
-import { ClassName } from '../../lib/ClassName';
+import { ClassName } from '@api-typed/common';
 
 export type Operation = 'list' | 'create' | 'read' | 'update' | 'delete';
 

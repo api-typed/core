@@ -1,5 +1,5 @@
+import { ClassName } from '@api-typed/common';
 import Container from 'typedi';
-import { ClassName } from '../../lib/ClassName';
 import { EventDispatcher } from '../EventDispatcher';
 
 export function OnEvent<T>(eventType: ClassName<T>): MethodDecorator {
