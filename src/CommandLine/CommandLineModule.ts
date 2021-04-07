@@ -1,11 +1,11 @@
 import { Config } from '@api-typed/config';
+import { LogLevel } from '@api-typed/logger';
 import * as chalk from 'chalk';
 import { Option, program } from 'commander';
 import { padEnd, upperFirst } from 'lodash';
 import Container from 'typedi';
 import { App, AppDelegate, AppRunMode } from '../App';
 import { AbstractModule } from '../App/AbstractModule';
-import { LogLevel } from '../Logger';
 import { getRegisteredCommands } from './decorators/Command';
 import { CommandInterface, CommandOption, HasCommands } from './types';
 

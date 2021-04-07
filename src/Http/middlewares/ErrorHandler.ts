@@ -1,10 +1,10 @@
+import { InjectLogger, LoggerInterface, LogLevel } from '@api-typed/logger';
 import { NextFunction, Request, Response } from 'express';
 import {
   ExpressErrorMiddlewareInterface,
   HttpError,
   Middleware,
 } from 'routing-controllers';
-import { InjectLogger, LoggerInterface, LogLevel } from '../../Logger';
 
 const HttpErrorNames = {
   400: 'Bad Request',

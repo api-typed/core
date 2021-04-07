@@ -1,10 +1,15 @@
 import { Config } from '@api-typed/config';
+import {
+  LogFormat,
+  Logger,
+  LoggerInterface,
+  LogLevel,
+} from '@api-typed/logger';
 import { useContainer as useContainerForClassValidator } from 'class-validator';
 import * as findPackageJson from 'find-package-json';
 import * as path from 'path';
 import Container, { ObjectType, Token } from 'typedi';
 import { loadEnvFiles } from '../lib/loadEnvFiles';
-import { LogFormat, Logger, LoggerInterface, LogLevel } from '../Logger';
 import { AppDelegate, AppRunMode, ModuleInterface } from './types';
 
 /**

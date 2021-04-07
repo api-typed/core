@@ -41,6 +41,7 @@
   "dependencies": {
     "@api-typed/common": "^0.1.0-alpha.2",
     "@api-typed/config": "^0.1.0-alpha.1",
+    "@api-typed/logger": "^0.1.0-alpha.3",
     "chalk": "^4.1.0",
     "commander": "^7.1.0",
     "dotenv": "^8.2.0",

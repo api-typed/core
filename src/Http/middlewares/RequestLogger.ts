@@ -1,7 +1,7 @@
 import { ConfigParam } from '@api-typed/config';
+import { InjectLogger, LoggerInterface, LogLevel } from '@api-typed/logger';
 import { NextFunction, Request, Response } from 'express';
 import { ExpressMiddlewareInterface, Middleware } from 'routing-controllers';
-import { InjectLogger, LoggerInterface, LogLevel } from '../../Logger';
 
 @Middleware({ type: 'before' })
 export class RequestLogger implements ExpressMiddlewareInterface {

@@ -1,9 +1,9 @@
 import { ConfigParam } from '@api-typed/config';
+import { InjectLogger, LoggerInterface } from '@api-typed/logger';
 import { exec, spawn } from 'child_process';
 import * as glob from 'glob';
 import * as path from 'path';
 import { Inject, Service } from 'typedi';
-import { InjectLogger, LoggerInterface } from '../../../../Logger';
 import { ConfigDumper } from './ConfigDumper';
 
 interface ExecutionParams {

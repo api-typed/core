@@ -1,4 +1,5 @@
-import { Command, CommandInterface, InjectLogger } from '../../../src';
+import { InjectLogger } from '@api-typed/logger';
+import { Command, CommandInterface } from '../../../src';
 
 interface HelloOptions {
   shout?: boolean;
