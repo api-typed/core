@@ -1,6 +1,5 @@
 import 'reflect-metadata';
 
-export * from './App';
 export * from './Cache';
 export * from './CommandLine';
 export * from './EventDispatcher';

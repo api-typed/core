@@ -1,4 +1,4 @@
-import { App } from '../App';
+import { App } from '@api-typed/app';
 
 export default (appFile: string): App => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires

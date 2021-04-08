@@ -1,10 +1,10 @@
-import { App, AppRunMode } from '../App';
+import { App } from '@api-typed/app';
 import requireApp from '../lib/requireApp';
 
 const run = async (appFile: string): Promise<void> => {
   const app = requireApp(appFile) as App;
   try {
-    await app.start(AppRunMode.HTTP);
+    await app.start('http');
   } catch (e) {
     console.error(e);
   }

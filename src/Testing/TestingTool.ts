@@ -1,6 +1,6 @@
+import { App } from '@api-typed/app';
 import * as supertest from 'supertest';
 import { Connection, DeepPartial, EntityTarget, Repository } from 'typeorm';
-import { App, AppRunMode } from '../App';
 
 interface TestingToolOptions {
   setup?: boolean;
@@ -19,11 +19,7 @@ export class TestingTool {
 
   private initiated = false;
 
-  constructor(
-    app: App,
-    options: TestingToolOptions = {},
-    runMode: AppRunMode = AppRunMode.HTTP,
-  ) {
+  constructor(app: App, options: TestingToolOptions = {}, runMode = 'http') {
     this.app = app;
     this.options = {
       ...this.options,
@@ -45,7 +41,7 @@ export class TestingTool {
     }
   }
 
-  public async init(runMode: AppRunMode = AppRunMode.HTTP): Promise<void> {
+  public async init(runMode = 'http'): Promise<void> {
     if (this.initiated) {
       throw new Error('App Under Test has already been initiated.');
     }
@@ -53,9 +49,9 @@ export class TestingTool {
     const res = await this.app.start(runMode);
 
     switch (runMode) {
-      case AppRunMode.Command:
+      case 'command':
         break;
-      case AppRunMode.HTTP:
+      case 'http':
         this.expressApp = res;
         break;
     }

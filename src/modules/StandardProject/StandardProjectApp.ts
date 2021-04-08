@@ -1,8 +1,7 @@
+import { App, ModuleInterface } from '@api-typed/app';
 import {
-  App,
   CommandLineModule,
   HttpModule,
-  ModuleInterface,
   StandardProjectModule,
   TypeORMModule,
 } from '../..';

@@ -1,6 +1,6 @@
+import { App } from '@api-typed/app';
 import { ConfigParam } from '@api-typed/config';
 import { Inject, Service } from 'typedi';
-import { App } from '../../../../App';
 import { FileCache } from '../../../../Cache';
 import { TypeORMModule } from '../../TypeORMModule';
 

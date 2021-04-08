@@ -1,5 +1,5 @@
+import { AbstractModule } from '@api-typed/app';
 import { Config } from '@api-typed/config';
-import { AbstractModule } from '../../App';
 import { HasCommands } from '../../CommandLine';
 import { HasControllers, HasMiddlewares } from '../../Http';
 import { loadCommands } from '../../lib/loadCommands';

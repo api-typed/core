@@ -1,7 +1,7 @@
+import { AbstractModule, App } from '@api-typed/app';
 import { Config } from '@api-typed/config';
 import Container from 'typedi';
 import { Connection, createConnection, useContainer } from 'typeorm';
-import { AbstractModule, App } from '../../App';
 import { HasCommands } from '../../CommandLine';
 import { Migrate } from './commands/Migrate';
 import { Migration } from './commands/Migration';
