@@ -1,7 +1,7 @@
 import { AbstractModule } from '@api-typed/app';
 import { Config } from '@api-typed/config';
+import { HasControllers } from '@api-typed/http-module';
 import Container from 'typedi';
-import { HasControllers } from '../../Http';
 import { ResourceController } from './ResourceController';
 import { ResourceRegistry } from './ResourceRegistry';
 

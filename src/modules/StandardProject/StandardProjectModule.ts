@@ -1,10 +1,13 @@
 import { AbstractModule } from '@api-typed/app';
 import { Config } from '@api-typed/config';
+import {
+  HasControllers,
+  HasMiddlewares,
+  loadControllers,
+  loadMiddlewares,
+} from '@api-typed/http-module';
 import { HasCommands } from '../../CommandLine';
-import { HasControllers, HasMiddlewares } from '../../Http';
 import { loadCommands } from '../../lib/loadCommands';
-import { loadControllers } from '../../lib/loadControllers';
-import { loadMiddlewares } from '../../lib/loadMiddlewares';
 import { HasEntities } from '../TypeORM';
 
 export class StandardProjectModule

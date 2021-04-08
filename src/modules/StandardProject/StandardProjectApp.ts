@@ -1,10 +1,6 @@
 import { App, ModuleInterface } from '@api-typed/app';
-import {
-  CommandLineModule,
-  HttpModule,
-  StandardProjectModule,
-  TypeORMModule,
-} from '../..';
+import { HttpModule } from '@api-typed/http-module';
+import { CommandLineModule, StandardProjectModule, TypeORMModule } from '../..';
 import { ApiResourcesModule } from '../ApiResources/ApiResourcesModule';
 
 export class StandardProjectApp extends App {

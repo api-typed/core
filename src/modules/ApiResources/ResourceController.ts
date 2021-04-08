@@ -15,7 +15,7 @@ import {
 } from 'routing-controllers';
 import { DeepPartial, EntityMetadata, Repository } from 'typeorm';
 import { InjectRepository } from 'typeorm-typedi-extensions';
-import { ApiResponse } from '../../Http';
+import { ApiResponse } from '../../Http/ApiResponse';
 import { Paginator } from './Paginator';
 import { ApiResourceMetaData } from './types';
 

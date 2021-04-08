@@ -42,6 +42,7 @@
     "@api-typed/app": "^0.1.0-alpha.4",
     "@api-typed/common": "^0.1.0-alpha.2",
     "@api-typed/config": "^0.1.0-alpha.1",
+    "@api-typed/http-module": "^0.1.0-alpha.6",
     "@api-typed/logger": "^0.1.0-alpha.3",
     "chalk": "^4.1.0",
     "commander": "^7.1.0",
