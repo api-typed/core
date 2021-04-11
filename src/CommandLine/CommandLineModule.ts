@@ -4,7 +4,6 @@ import { LogLevel } from '@api-typed/logger';
 import * as chalk from 'chalk';
 import { Option, program } from 'commander';
 import { padEnd, upperFirst } from 'lodash';
-import Container from 'typedi';
 import { getRegisteredCommands } from './decorators/Command';
 import { CommandInterface, CommandOption, HasCommands } from './types';
 
@@ -76,15 +75,13 @@ export class CommandLineModule extends AbstractModule implements AppDelegate {
     process.exit(exitCode);
   }
 
-  public registerCommand<TFunction extends Function>(
-    target: TFunction,
+  public registerCommand<T>(
+    target: T,
     signature: string,
     description?: string,
     options?: Record<string, CommandOption | string>,
   ): void {
-    Container.set({
-      type: target,
-    });
+    this.app.container.set(target);
 
     const cmd = this.program.command(signature);
 
@@ -124,7 +121,7 @@ export class CommandLineModule extends AbstractModule implements AppDelegate {
     cmd.action(async (...args) => {
       await this.exec(
         cmd.name(),
-        Container.get<CommandInterface>(target),
+        this.app.container.get<CommandInterface>(target),
         args.slice(0, args.length - 1),
       );
     });

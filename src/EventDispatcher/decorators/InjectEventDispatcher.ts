@@ -1,8 +1,8 @@
 import Container from 'typedi';
 import { EventDispatcher } from '../EventDispatcher';
 
-export function InjectEventDispatcher() {
-  return function (object: unknown, propertyName: string, index?: number) {
+export function InjectEventDispatcher(): ParameterDecorator {
+  return function (object: any, propertyName: string, index?) {
     Container.registerHandler({
       object,
       propertyName,

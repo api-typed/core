@@ -57,7 +57,7 @@ export class TestingTool {
     }
 
     if (this.options.migrate) {
-      const connection = this.app.get(Connection);
+      const connection = this.app.container.get(Connection);
       await connection.runMigrations();
 
       // seed ?
@@ -72,7 +72,7 @@ export class TestingTool {
     }
 
     if (this.options.migrate) {
-      const connection = this.app.get(Connection);
+      const connection = this.app.container.get(Connection);
       await connection.dropDatabase();
     }
 
@@ -80,7 +80,7 @@ export class TestingTool {
   }
 
   public getRepository<T>(target: EntityTarget<T>): Repository<T> {
-    return this.app.get(Connection).getRepository(target);
+    return this.app.container.get(Connection).getRepository(target);
   }
 
   public async createEntity<T>(

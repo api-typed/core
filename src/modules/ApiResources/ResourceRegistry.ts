@@ -2,6 +2,7 @@ import { ClassName } from '@api-typed/common';
 import { ConfigParam } from '@api-typed/config';
 import { kebabCase } from 'lodash';
 import * as pluralize from 'pluralize';
+import { Service } from 'typedi';
 import {
   ApiResourceMetaData,
   ApiResourceOptions,
@@ -9,6 +10,7 @@ import {
   OperationMetaData,
 } from './types';
 
+@Service()
 export class ResourceRegistry {
   private readonly resources: ApiResourceMetaData[] = [];
 

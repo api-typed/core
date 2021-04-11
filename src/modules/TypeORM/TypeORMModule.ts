@@ -1,6 +1,5 @@
 import { AbstractModule, App } from '@api-typed/app';
 import { Config } from '@api-typed/config';
-import Container from 'typedi';
 import { Connection, createConnection, useContainer } from 'typeorm';
 import { HasCommands } from '../../CommandLine';
 import { Migrate } from './commands/Migrate';
@@ -37,7 +36,10 @@ export class TypeORMModule extends AbstractModule implements HasCommands {
       'database',
     ]);
 
-    useContainer(Container);
+    useContainer(app.container, {
+      fallback: true,
+      fallbackOnErrors: true,
+    });
 
     this.entities = app.loadFromModules<HasEntities, string>('loadEntities');
     this.migrations = [app.config.getRequired('typeorm.migrations')];
@@ -51,7 +53,7 @@ export class TypeORMModule extends AbstractModule implements HasCommands {
       migrations: this.migrations,
       subscribers: this.subscribers,
     });
-    Container.set(Connection, this.connection);
+    // app.container.set(Connection, this.connection);
   }
 
   public async close(): Promise<void> {

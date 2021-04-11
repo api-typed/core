@@ -13,8 +13,10 @@ import {
   Put,
   UnauthorizedError,
 } from 'routing-controllers';
+import { Service } from 'typedi';
 
 @JsonController('/test')
+@Service()
 export class TestController {
   @Get()
   public get(): any {
