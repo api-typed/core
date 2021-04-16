@@ -1,5 +1,6 @@
+import { Command, CommandInterface } from '@api-typed/command-line';
 import { InjectLogger } from '@api-typed/logger';
-import { Command, CommandInterface } from '../../../src';
+import { Service } from 'typedi';
 
 interface HelloOptions {
   shout?: boolean;
@@ -19,6 +20,7 @@ interface HelloOptions {
     choices: ['notice', 'error', 'info'],
   },
 })
+@Service()
 export class Hello implements CommandInterface {
   constructor(@InjectLogger() private readonly logger) {}
 

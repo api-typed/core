@@ -1,7 +1,7 @@
 import { AbstractModule, App } from '@api-typed/app';
+import { HasCommands } from '@api-typed/command-line';
 import { Config } from '@api-typed/config';
 import { Connection, createConnection, useContainer } from 'typeorm';
-import { HasCommands } from '../../CommandLine';
 import { Migrate } from './commands/Migrate';
 import { Migration } from './commands/Migration';
 import { Revert } from './commands/Revert';

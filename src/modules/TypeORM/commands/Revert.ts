@@ -1,8 +1,9 @@
-import { Inject } from 'typedi';
-import { Command, CommandInterface } from '../../../CommandLine';
+import { Command, CommandInterface } from '@api-typed/command-line';
+import { Inject, Service } from 'typedi';
 import { TypeORMCliExecutor } from './utils/TypeORMCliExecutor';
 
 @Command('db:revert', 'Revert database changes made by last migration run')
+@Service()
 export class Revert implements CommandInterface {
   constructor(
     @Inject(() => TypeORMCliExecutor)

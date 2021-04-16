@@ -1,4 +1,5 @@
 import { AbstractModule } from '@api-typed/app';
+import { HasCommands, loadCommands } from '@api-typed/command-line';
 import { Config } from '@api-typed/config';
 import {
   HasControllers,
@@ -6,8 +7,6 @@ import {
   loadControllers,
   loadMiddlewares,
 } from '@api-typed/http-module';
-import { HasCommands } from '../../CommandLine';
-import { loadCommands } from '../../lib/loadCommands';
 import { HasEntities } from '../TypeORM';
 
 export class StandardProjectModule

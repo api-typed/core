@@ -1,11 +1,12 @@
+import { Command, CommandInterface } from '@api-typed/command-line';
 import * as chalk from 'chalk';
 import * as path from 'path';
-import { Inject } from 'typedi';
-import { Command, CommandInterface } from '../../../CommandLine';
+import { Inject, Service } from 'typedi';
 import { Migrate } from './Migrate';
 import { TypeORMCliExecutor } from './utils/TypeORMCliExecutor';
 
 @Command('db:migration <name>', 'Generate database migration')
+@Service()
 export class Migration implements CommandInterface {
   constructor(
     @Inject(() => TypeORMCliExecutor)

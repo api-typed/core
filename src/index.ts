@@ -1,5 +1,4 @@
 export * from './Cache';
-export * from './CommandLine';
 export * from './EventDispatcher';
 export * from './modules/ApiResources';
 export * from './modules/StandardProject';

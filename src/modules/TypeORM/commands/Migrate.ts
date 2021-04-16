@@ -1,11 +1,12 @@
-import { Inject } from 'typedi';
-import { Command, CommandInterface } from '../../../CommandLine';
+import { Command, CommandInterface } from '@api-typed/command-line';
+import { Inject, Service } from 'typedi';
 import { TypeORMCliExecutor } from './utils/TypeORMCliExecutor';
 
 @Command(
   'db:migrate',
   'Update database schema by running any pending migrations',
 )
+@Service()
 export class Migrate implements CommandInterface {
   constructor(
     @Inject(() => TypeORMCliExecutor)

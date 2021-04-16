@@ -1,7 +1,8 @@
 import { App, ModuleInterface } from '@api-typed/app';
+import { CommandLineModule } from '@api-typed/command-line';
 import { HttpModule } from '@api-typed/http-module';
-import { CommandLineModule, StandardProjectModule, TypeORMModule } from '../..';
 import { ApiResourcesModule } from '../ApiResources/ApiResourcesModule';
+import { StandardProjectModule, TypeORMModule } from '../..';
 
 export class StandardProjectApp extends App {
   constructor(rootDir: string, modules: ModuleInterface[] = []) {
