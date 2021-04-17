@@ -7,7 +7,7 @@ import {
   loadControllers,
   loadMiddlewares,
 } from '@api-typed/http-module';
-import { HasEntities } from '../TypeORM';
+import { HasEntities } from '@api-typed/typeorm-module';
 
 export class StandardProjectModule
   extends AbstractModule

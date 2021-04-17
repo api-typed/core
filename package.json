@@ -42,8 +42,8 @@
     "@api-typed/config": "^0.1.0-alpha.14",
     "@api-typed/http-module": "^0.1.0-alpha.14",
     "@api-typed/logger": "^0.1.0-alpha.14",
+    "@api-typed/typeorm-module": "^0.1.0-alpha.15",
     "api-typed": "^0.1.0-alpha.14",
-    "pg": "^8.5.1",
     "pluralize": "^8.0.0",
     "reflect-metadata": "^0.1.13",
     "supertest": "^6.1.3"
