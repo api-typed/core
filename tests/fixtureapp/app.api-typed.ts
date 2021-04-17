@@ -1,3 +1,3 @@
-import { StandardProjectApp } from '../../src';
+import { StandardApp } from '@api-typed/standard-app';
 
-export default new StandardProjectApp(__dirname);
+export default new StandardApp(__dirname);

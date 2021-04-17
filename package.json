@@ -42,6 +42,7 @@
     "@api-typed/config": "^0.1.0-alpha.14",
     "@api-typed/http-module": "^0.1.0-alpha.14",
     "@api-typed/logger": "^0.1.0-alpha.14",
+    "@api-typed/standard-app": "^0.1.0-alpha.17",
     "@api-typed/typeorm-module": "^0.1.0-alpha.15",
     "api-typed": "^0.1.0-alpha.14",
     "pluralize": "^8.0.0",
