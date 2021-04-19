@@ -1,3 +1,3 @@
-import { StandardApp } from '@api-typed/standard-app';
+import { StandardApp } from 'api-typed';
 
 export default new StandardApp(__dirname);

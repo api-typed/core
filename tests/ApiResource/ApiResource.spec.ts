@@ -1,5 +1,5 @@
+import { TestingTool } from 'api-typed';
 import { range } from 'lodash';
-import { TestingTool } from '../../src';
 import app from '../fixtureapp/app.api-typed';
 import { Ingredient, Measure } from '../fixtureapp/entities/Ingredient';
 import { Rating } from '../fixtureapp/entities/Rating';
