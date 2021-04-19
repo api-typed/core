@@ -1,4 +1,3 @@
-import 'reflect-metadata';
 import Container, { Service } from 'typedi';
 import { EventDispatcher } from '../EventDispatcher';
 import { InjectEventDispatcher } from './InjectEventDispatcher';
